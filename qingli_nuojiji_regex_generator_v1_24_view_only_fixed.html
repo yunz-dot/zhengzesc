@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>清皊の糯叽机正则生成器 V1.24 查看型识别修复版</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:linear-gradient(135deg,#ffd6e7 0%,#d7ecff 55%,#f8fbff 100%);--card:rgba(255,255,255,.94);--pink:#ff83ad;--pink2:#ffc1d8;--blue:#75c8ff;--blue2:#c7e8ff;--text:#584850;--sub:#8b7b84;--line:#b7dcff;--tag:#f7fbff;--green:#65d69d;--gold:#ffd36a;--purple:#bca5ff;--danger:#ef5b82}
+body{font-family:'PingFang SC','Microsoft YaHei',system-ui,sans-serif;background:var(--bg);background-attachment:fixed;color:var(--text);min-height:100vh;padding-bottom:118px}.header{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);text-align:center;padding:16px;border-bottom:3px dashed var(--pink2);box-shadow:0 4px 16px rgba(117,200,255,.18)}
+h1{font-size:23px;color:#ff75a3;text-shadow:1px 1px 0 #fff,2px 2px 0 rgba(255,193,216,.45)}.wrap{max-width:1180px;margin:0 auto;padding:16px}.card{position:relative;background:var(--card);border:2px dashed var(--line);border-radius:24px;padding:24px 20px 20px;margin-bottom:24px;box-shadow:0 8px 22px rgba(117,200,255,.14)}.tape{position:absolute;top:-12px;left:50%;transform:translateX(-50%) rotate(-3deg);width:108px;height:26px;background:rgba(255,193,216,.72);border-left:2px dotted #fff;border-right:2px dotted #fff}.tape.blue{background:rgba(117,200,255,.72);transform:translateX(-50%) rotate(2deg)}.title{font-size:18px;font-weight:900;color:#ff75a3;margin-bottom:12px;display:inline-block;border-bottom:4px solid var(--blue);padding-bottom:2px}.title:before{content:'🐾 '}.desc{font-size:12px;line-height:1.7;color:var(--sub);background:#fff7fb;border-left:4px solid var(--pink2);padding:10px 12px;border-radius:12px;margin-bottom:12px}.note{font-size:12px;line-height:1.65;color:var(--sub);background:#f7fbff;border:1px dashed var(--blue2);padding:10px 12px;border-radius:12px;margin-top:10px}.warn{background:#fff1f6;border-color:#ffb8d0;color:#b73b61}label{display:block;font-size:13px;font-weight:900;margin:14px 0 7px;color:var(--text)}.label-note{font-size:11px;color:var(--sub);font-weight:400;margin-left:4px}input,select,textarea{width:100%;border:2px solid #cfe8ff;border-radius:15px;padding:12px 14px;background:#fff;color:var(--text);font-size:14px;outline:none;box-shadow:inset 0 2px 4px rgba(0,0,0,.02)}input:focus,select:focus,textarea:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,131,173,.2)}textarea{min-height:88px;resize:vertical;line-height:1.65}.big{min-height:145px}.code{font-family:Consolas,Monaco,monospace;font-size:12px;min-height:160px;white-space:pre}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.row4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.tags{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px}.tag{font-size:12px;padding:8px 13px;border-radius:999px;background:var(--tag);border:1px solid #cfe8ff;color:#557;cursor:pointer;user-select:none;transition:.15s}.tag:hover{transform:translateY(-1px);border-color:var(--blue);box-shadow:0 4px 8px rgba(117,200,255,.22)}.tag.on{background:linear-gradient(135deg,#ff75a3,var(--pink2));color:#fff;border-color:#ff75a3;font-weight:900;box-shadow:0 4px 10px rgba(255,117,163,.28)}.tag.blue.on{background:linear-gradient(135deg,#43abe8,var(--blue));border-color:#43abe8}.tag.green.on{background:linear-gradient(135deg,#34b978,var(--green));border-color:#34b978}.tag.gold.on{background:linear-gradient(135deg,#f4b400,var(--gold));border-color:#f4b400}.tag.purple.on{background:linear-gradient(135deg,#9575ff,var(--purple));border-color:#9575ff}.section-box{background:#f8fcff;border:1px dashed var(--line);border-radius:16px;padding:14px;margin-top:12px}.section-box.pink{background:#fff8fb;border-color:var(--pink2)}button{border:none;border-radius:16px;padding:12px;color:#fff;font-weight:900;font-size:14px;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:4px}button:hover{transform:translateY(-2px);filter:brightness(1.04);box-shadow:0 4px 12px rgba(0,0,0,.1)}button:disabled{opacity:.62;cursor:not-allowed;transform:none;filter:grayscale(.1)}.btn-primary{background:linear-gradient(135deg,#ff75a3,var(--pink2))}.btn-blue{background:linear-gradient(135deg,#43abe8,var(--blue))}.btn-green{background:linear-gradient(135deg,#34b978,var(--green))}.btn-gold{background:linear-gradient(135deg,#f4b400,var(--gold))}.btn-white{background:#fff;border:2px solid var(--pink2);color:#ff75a3}.pill{display:inline-block;font-size:11px;color:#fff;background:#ff75a3;border-radius:999px;padding:3px 8px;margin-left:6px;font-weight:900}.pill.blue{background:#43abe8}.output{white-space:pre-wrap;line-height:1.72;font-size:13px;background:#fff;border:2px solid var(--pink2);border-radius:16px;padding:16px;min-height:90px;max-height:480px;overflow:auto}.placeholder{color:var(--sub);text-align:center;border:2px dashed var(--pink2);background:transparent;padding:34px 10px}.preview{width:100%;min-height:430px;border:2px dashed var(--line);border-radius:16px;background:#fff;margin-top:8px}.bar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.96);border-top:3px dashed var(--line);padding:12px 16px;display:grid;grid-template-columns:1fr 1fr 1fr 1.4fr;gap:10px;z-index:120;backdrop-filter:blur(8px)}.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(255,117,163,.96);color:#fff;border:2px solid #fff;padding:11px 22px;border-radius:999px;font-size:14px;font-weight:900;display:none;z-index:200;box-shadow:0 6px 16px rgba(255,117,163,.4)}details{background:#fff;border:1px dashed var(--line);border-radius:16px;padding:12px;margin-top:12px}summary{cursor:pointer;font-weight:900;color:#43abe8}.tiny{font-size:11px;color:var(--sub);line-height:1.5}@media(max-width:760px){.row,.row3,.row4{grid-template-columns:1fr}.bar{grid-template-columns:1fr 1fr}.card{padding:20px 14px 14px}}
+</style>
+</head>
+<body>
+<div class="header"><h1>清皊の糯叽机正则生成器 V1.24 查看型识别修复版</h1></div>
+<div class="wrap">
+  <div class="card"><div class="tape blue"></div><div class="title">① API 接口与世界书</div><div class="desc">世界书会并入生成 Prompt。AI 生成前必须读取这里的全局规则。</div>
+    <div class="row4"><div><label>API Base URL</label><input id="apiBase" placeholder="https://api.openai.com/v1"></div><div><label>模型列表</label><select id="modelSelect" onchange="selectModel()"><option value="">先拉取模型 / 或手动输入</option></select></div><div><label>Model</label><input id="model" placeholder="例如 gpt-4o / deepseek-chat"></div><div><label>API Key</label><input id="apiKey" type="password" placeholder="sk-... / 中转 Key"></div></div>
+    <label>世界书 / 全局生成规则</label>
+    <textarea id="worldBook" class="big" placeholder="例：所有正则必须适配糯叽机/小手机；标签名必须一致；触发词只使用用户填写内容；卡片应作为聊天的一部分；不要让核心内容依赖 JS；互动小应用可以使用 JS 做点击、勾选、总价计算和 data-fill，但商品内容本身必须静态显示。"></textarea>
+    <div class="row4" style="margin-top:14px"><button class="btn-blue" onclick="saveApiWorldBook()">💾 保存</button><button class="btn-green" onclick="fetchModels()">🔄 拉取模型</button><button class="btn-white" onclick="testApi()">⚡ 测试连接</button><button class="btn-white" onclick="loadDefaultWorldBook()">📖 默认世界书</button></div>
+  </div>
+
+  <div class="card"><div class="tape"></div><div class="title">② 需求与基础信息</div><div class="desc">这里只写真实需求。pattern 属于高级设置，默认由 tag 自动生成。</div>
+    <label>我想生成什么正则 / 模板？ <span class="pill">AI匹配依据</span></label>
+    <textarea id="userNeed" class="big" placeholder="例：我想做一个角色心愿单购物页，类似淘宝购物车。9宫格展示至少9个商品，可以多选、结算。点击购买后先显示支付成功，再点“生成小票”把已购买信息发给角色，让 AI 再生成一张已购买小票页面。"></textarea>
+    <label>补充要求 / 避雷</label><textarea id="extraNeed" placeholder="例：不要自动扩展触发词；不要图片；不要列表排版；必须是九宫格；购买按钮要 data-fill 回填输入框。"></textarea>
+    <div class="row4"><div><label>规则名称</label><input id="ruleName" value="我的糯叽机正则"></div><div><label>分类</label><input id="category" value="清皊正则集"></div><div><label>包裹标签 tag</label><input id="tagName" value="custom-card" oninput="syncPattern()"></div><div><label>启用状态</label><select id="enabled"><option value="1">启用</option><option value="0">停用</option></select></div></div>
+    <div class="row4"><div><label>数据格式</label><select id="parseMode"><option value="json">JSON 数据</option><option value="text">纯文本</option><option value="kv">键值对 KV</option></select></div><div><label>显示方式</label><select id="renderMode"><option value="iframe">iframe 页面</option><option value="inline">inline 内嵌</option></select></div><div><label>适用消息</label><select id="role"><option value="ai">AI 输出</option><option value="both">双方都可</option><option value="user">User 输出</option></select></div><div><label>触发关键词 <span class="label-note">只使用你填写的词</span></label><input id="triggerKeywords" placeholder="例：心愿单，想要什么礼物"></div></div>
+    <details><summary>高级正则设置：一般不用改</summary><div class="row"><div><label>flags</label><input id="flags" value="g"></div><div><label>pattern 自动生成结果</label><input id="pattern" class="code" value="<custom-card>([\s\S]*?)</custom-card>"></div></div></details>
+    <div class="row" style="margin-top:14px"><button class="btn-primary" onclick="autoMatchTags()">🤖 AI 根据②需求智能匹配全部标签</button><button class="btn-white" onclick="localSmartMatch(true)">✨ 本地智能匹配</button></div>
+  </div>
+
+  <div class="card"><div class="tape blue"></div><div class="title">③ 运行模式 <span class="pill blue">先决定类型</span></div><div class="desc">这是新版关键：展示卡、半互动、互动小应用分开生成，避免购物车/小游戏被当成普通列表。</div>
+    <label>模板运行模式</label><div class="tags" id="runMode"></div>
+    <div class="note warn">如果你要“点击、勾选、购买、结算、让角色知道用户选了什么”，必须选 <b>互动小应用模式</b>。这类模板允许少量 JS 做交互，但不允许 JS 负责商品名称、价格等核心内容的初始渲染。</div>
+  </div>
+
+  <div class="card"><div class="tape"></div><div class="title">④ UI 设置标签 <span class="pill">容器 / 风格 / 布局 / 质感 / 图片</span></div>
+    <label>UI 容器</label><div class="tags" id="uiContainer"></div>
+    <label>UI 风格</label><div class="tags" id="uiStyle"></div>
+    <label>布局层级</label><div class="tags" id="uiLayout"></div>
+    <label>视觉元素</label><div class="tags" id="uiTexture"></div>
+    <label>图片素材用途</label><div class="tags" id="uiImageRole"></div>
+    <div class="section-box pink"><div class="row4"><div><label>主图 / 封面 URL</label><input id="mainImage" placeholder="https://..."></div><div><label>背景图 URL</label><input id="bgImage" placeholder="https://..."></div><div><label>头像 / 图标 URL</label><input id="avatarImage" placeholder="https://..."></div><div><label>图片用途</label><select id="imageUse"><option>不使用图片</option><option>顶部封面图</option><option>左侧头像图</option><option>背景氛围图</option><option>证件照/档案照</option></select></div></div></div>
+  </div>
+
+  <div class="card"><div class="tape blue"></div><div class="title">⑤ 功能设置标签 <span class="pill blue">只管用途</span></div>
+    <label>模板大类</label><div class="tags" id="templateType"></div>
+    <label>触发场景</label><div class="tags" id="triggerScene"></div>
+    <label>交互功能</label><div class="tags" id="interactionType"></div>
+    <label>输出区块</label><div class="tags" id="outputBlocks"></div>
+    <label>适配策略</label><div class="tags" id="safeMode"></div>
+  </div>
+
+  <div class="card"><div class="tape"></div><div class="title">⑥ 输出结构标签 <span class="pill">数据 / 字段 / 按钮 / 二阶段</span></div>
+    <label>数据形态</label><div class="tags" id="dataShape"></div>
+    <label>字段组合</label><div class="tags" id="fieldPack"></div>
+    <label>按钮/下一步结构</label><div class="tags" id="actionPack"></div>
+    <label>输出格式</label><div class="tags" id="outputFormat"></div>
+    <label>结果归属</label><div class="tags" id="resultRole"></div>
+    <label>二阶段输出</label><div class="tags" id="secondStage"></div>
+    <label>内容长度</label><div class="tags" id="contentLength"></div>
+    <div class="row3" style="margin-top:14px"><button class="btn-blue" onclick="refreshByTags()">🧩 根据标签生成结构</button><button class="btn-white" onclick="randomTags()">🎲 随机搭配</button><button class="btn-gold" onclick="generateShoppingLocal()">🛒 本地稳定购物页</button></div>
+    <div class="note">互动型正则的“购买后行为 / 二阶段小票 / 告诉角色”已移到下方专项区域，需求框写到相关要求后可自动识别。</div>
+  </div>
+
+  <div class="card"><div class="tape blue"></div><div class="title">⑦ QR互动闭环专项设置 <span class="pill blue">分层标签版</span></div>
+    <div class="desc">用于配置互动结果、回填方式与后续动作。</div>
+    <input type="hidden" id="interactionAuto" value="auto">
+    <input type="hidden" id="interactionPreset" value="auto_detect">
+    <input type="hidden" id="purchaseFlow" value="success_only">
+    <input type="hidden" id="qrMode" value="none">
+    <input type="hidden" id="qrCarrier" value="none">
+    <input type="hidden" id="qrPayload" value="short_protocol">
+    <input type="hidden" id="qrAfterAction" value="role_reply">
+    <input type="hidden" id="qrSafety" value="confirm_before_fill">
+    <input type="hidden" id="qrScene" value="general">
+    <input type="hidden" id="qrTriggerAction" value="button_click">
+    <input type="hidden" id="qrResultType" value="operation_result">
+    <input type="hidden" id="qrTone" value="role_readable_soft">
+
+
+    <div class="section-box pink">
+      <label>自动识别互动需求</label><div class="tags" id="interactionAutoTags"></div>
+      <label>互动类型预设</label><div class="tags" id="interactionPresetTags"></div>
+      <label>购买后行为 / 点击后动作</label><div class="tags" id="purchaseFlowTags"></div>
+
+      <label>QR 协议层级 <span class="label-note">决定是不是需要把点击结果传给角色</span></label><div class="tags" id="qrModeTags"></div>
+      <label>QR 承载方式 <span class="label-note">参考案例：data-fill / JS动态结算 / 卡片内切换</span></label><div class="tags" id="qrCarrierTags"></div>
+      <label>QR 回填内容形态 <span class="label-note">角色最终看到什么</span></label><div class="tags" id="qrPayloadTags"></div>
+      <label>QR 发送后 AI 动作 <span class="label-note">用户发送后，角色应该做什么</span></label><div class="tags" id="qrAfterActionTags"></div>
+      <label>QR 场景类型 <span class="label-note">先决定这张卡片属于哪种互动案例</span></label><div class="tags" id="qrSceneTags"></div>
+      <label>QR 触发动作 <span class="label-note">用户点了什么、选了什么、提交了什么</span></label><div class="tags" id="qrTriggerActionTags"></div>
+      <label>QR 结果类型 <span class="label-note">回填给角色的结果是什么</span></label><div class="tags" id="qrResultTypeTags"></div>
+      <label>QR 语气包装 <span class="label-note">回填文本要像系统指令、自然话术还是角色可读回执</span></label><div class="tags" id="qrToneTags"></div>
+      <label>QR 安全策略 <span class="label-note">避免按钮误触、格式掉落、角色误解</span></label><div class="tags" id="qrSafetyTags"></div>
+
+      <div class="row" style="margin-top:10px">
+        <div><label>第二阶段标签 tag</label><input id="receiptTag" value="receipt-card" oninput="syncPattern();refreshByTags(false)"></div>
+        <div><label>互动闭环状态</label><div id="interactionModeBadge" class="note" style="margin-top:0">当前：无 QR，只显示页面。</div></div>
+      </div>
+    </div>
+
+    <label>QR 协议说明 / 第二阶段指令模板</label>
+    <textarea id="secondaryInstruction" class="big" placeholder="例：点击购买后不要静默自动发送。按钮生成【QR_心愿单购买】结构化文本，包含商品、金额、状态；用户发送后，角色必须认为购买已完成，并自然回应。若需要二阶段小票，再输出 <receipt-card>...</receipt-card>。"></textarea>
+
+    <div class="row3" style="margin-top:14px">
+      <button class="btn-primary" onclick="applyInteractionFromNeed(true)">🤖 根据需求识别 QR 闭环</button>
+      <button class="btn-gold" onclick="applyPreset('shopping_receipt',true)">🧾 购物 QR + 小票双正则</button>
+      <button class="btn-blue" onclick="applyPreset('choice_result',true)">🔘 选择 QR 回填</button>
+    </div>
+    <div class="row3" style="margin-top:10px">
+      <button class="btn-green" onclick="applyPreset('dynamic_summary',true)">🧮 动态结算 QR</button>
+      <button class="btn-white" onclick="applyPreset('inner_switch',true)">📱 仅卡片内切换</button>
+      <button class="btn-white" onclick="applyPreset('shopping_success',true)">✅ 只显示支付成功</button>
+    </div>
+
+    <div id="interactionDetectOut" class="note">
+      当前未识别 QR 闭环。写入“data-fill、回填、按钮、选择结果、购买、小票、再次生成、下一步、提交问卷”等需求后，这里会自动更新。
+    </div>
+  </div>
+
+  <div class="card"><div class="tape blue"></div><div class="title">⑧ 一键生成</div><div class="desc">AI 生成完整糯叽机 JSON。购物/选择/结算类建议先用“本地稳定购物页”验证结构，再让 AI 美化。</div>
+    <div class="row3"><button class="btn-primary" onclick="generateAll()">✨ AI 一键生成完整 JSON</button><button class="btn-blue" onclick="copyJson()">📋 复制 JSON</button><button class="btn-green" onclick="downloadJson()">⬇️ 下载 JSON</button></div>
+    <div style="display:none"><textarea id="fieldSpec"></textarea><textarea id="sampleOutput"></textarea><textarea id="aiPrompt"></textarea><textarea id="cssScope"></textarea></div>
+  </div>
+
+  <div class="card"><div class="tape"></div><div class="title">⑨ 生成结果</div>
+    <div class="row3"><button class="btn-blue" onclick="copyJson()">📋 复制 JSON</button><button class="btn-green" onclick="copyResultHtmlToEditor()">⬇️ 提取 HTML 到下方代码框</button><button class="btn-gold" onclick="downloadAll()">📦 下载本地合集</button></div>
+    <label>生成结果</label><div id="jsonOut" class="output placeholder">点击“AI 一键生成完整 JSON”。</div>
+    <label>兼容检查</label><div id="compatOut" class="note">生成后会检查：标签一致、触发词严格、QR 线索、htmlTemplate 是否误变整条 JSON、字段是否错配、核心内容是否依赖 JS。</div>
+  </div>
+
+  <div class="card"><div class="tape blue"></div><div class="title">⑩ HTML 修改与实时预览</div>
+    <div class="row3"><button class="btn-green" onclick="refreshPreviewOnly()">👀 刷新预览</button><button class="btn-blue" onclick="copyHtmlTemplate()">📋 复制 HTML</button><button class="btn-white" onclick="clearPreview()">🧹 清空预览</button></div>
+    <label>可编辑 HTML 代码框</label><textarea id="htmlTemplate" class="code" style="min-height:260px"></textarea>
+    <label>HTML 预览窗口</label><iframe id="previewFrame" class="preview"></iframe>
+  </div>
+
+  <div class="card"><div class="tape"></div><div class="title">📂 本地规则库</div><div id="saves" class="tiny">暂无存档。</div></div>
+</div>
+<div class="bar"><button class="btn-blue" onclick="copyResultHtmlToEditor()">⬇️ HTML到预览</button><button class="btn-green" onclick="copyJson()">📋 复制 JSON</button><button class="btn-white" onclick="downloadJson()">⬇️ 下载 JSON</button><button class="btn-primary" onclick="generateAll()">✨ AI生成</button></div><div class="toast" id="toast"></div>
+<script>
+const TAGS={
+ runMode:['静态展示模式','半互动按钮模式','互动小应用模式','查看展示模式'],
+ uiContainer:['单卡片','信息面板','状态面板','手机界面','购物车页面','商品九宫格','商品详情页','底部结算栏','弹窗面板','报告页','票据页','证件卡','会员卡','多页应用','小游戏机','仪式法阵','翻页书','档案夹','搜索结果页','控制台面板','地图窗口','播放器界面','订单详情页','聊天记录页','任务看板','排行榜','关系图谱','日历日程页','背包物品栏','盲盒抽取页','签署协议页','公告通知页','邀请函卡片','婚礼请柬页','合同协议页','支付凭证页','微信支付页','社交动态页','朋友圈界面','微信列表界面','私聊窗口','群聊窗口','微博动态页','小红书笔记页','视频平台页','搜索引擎页','地图导航页','浏览器窗口','邮件收件箱','短信通知页','备忘录页面','便签墙','桌面小组件','锁屏通知卡','系统设置页','控制中心','任务仪表盘','数据看板','项目看板','CRM客户卡','供应商档案卡','订单追踪页','报价单页面','发票账单页','库存货架页','产品目录页','样品册页面','物流追踪页','售后工单页','客户跟进页','学习打卡页','课程进度页','错题本页面','单词卡片页','健康记录页','运动打卡页','饮水提醒页','睡眠报告页','宠物状态页','宠物喂养页','背包详情页','道具说明页','成就徽章页','奖励领取页','投票面板','问卷表单页','反馈收集页','资源下载页','文件夹页面','藏书阁书架','小说阅读器','剧本选择页','导演场记板','情绪检测仪','塔罗占卜页','抽卡结果页','抽奖转盘页','扭蛋机页面','老虎机页面','地图地点卡','旅行行程页','天气预报卡','预算账本页','关系好感页','纪念日页面','礼物清单页','愿望瓶页面','秘密档案页','实验室终端','医疗病历页','校园公告页','考试成绩单','排行榜榜单','图鉴收藏页','拍立得相册','相册瀑布流','音乐播放器','播客播放器','电台频道页','影院票根页','车票机票页','酒店预订页','餐厅菜单页','外卖订单页','收纳盒页面','时间胶囊页','许愿池页面','魔法商店页','冒险任务板','副本结算页','角色属性面板','世界书页面','组织档案页','阵营关系页','事件时间线'],
+ uiStyle:['粉蓝手账','极简白卡','黑金高级','奶油柔和','薄荷清新','购物平台风','社交软件风','银行账单风','赛博终端','复古纸张','玻璃拟态','暗色悬疑','梦境渐变','像素游戏','塔罗神秘','东方古风','现代商务','奢侈品杂志','可爱贴纸','侦探卷宗','魔法书页','医院病历','合同文书','地图导航','视频平台','搜索引擎','闲置交易平台','粉色少女','冷淡灰白','霓虹夜店','校园公告栏','手写便签','游戏 HUD','系统弹窗','微信拟真','朋友圈拟真','iOS拟真','Android拟真','谷歌Material','B站粉蓝','小红书笔记风','微博热搜风','Notion极简','Obsidian暗紫','复古打字机','旧报纸风','羊皮卷风','档案牛皮纸','胶片复古','拍立得相纸','电影场记板','黑白漫画','日系杂志','韩系清透','法式浪漫','森系自然','海盐蓝白','樱花粉白','奶油黄白','抹茶绿','莓果甜心','焦糖咖啡','冰川蓝','薰衣草紫','莫兰迪色','低饱和高级灰','高饱和糖果','蒸汽波','Y2K镭射','未来科幻','全息玻璃','深海蓝黑','星空银河','雨夜霓虹','末日废土','机甲工业','电子故障风','黑客终端','实验室报告','医疗清单','心理测评','童话绘本','魔女手账','炼金术风','宗门玉简','朝堂奏折','武侠江湖','民国书信','欧式请柬','婚礼金边','契约羊皮纸','法律文件','品牌官网风','高端珠宝风','精品包装风','餐厅菜单风','咖啡馆小票','航旅登机牌','酒店确认单','课程讲义风','学习笔记风','健身APP风','健康报告风','宠物APP风','游戏背包风','RPG任务板','抽卡手游风','乙女游戏风','恋爱便签风','秘密日记风','情绪仪表风','可爱猫猫风','黑猫书本风'],
+ uiLayout:['顶部标题栏','顶部状态栏','双栏信息','三栏统计','九宫格布局','3×3宫格','四宫格','双列宫格','商品卡片网格','瀑布流宫格','横向滑动','纵向列表','列表排版','时间轴','底部固定栏','底部导航栏','详情弹窗','选择浮层','总价栏','购买成功页','按钮组','分区标题','标签角标','折叠详情','分页切换','左图右文','上图下文','大数字居中','评分仪表盘','进度条','地图+信息卡','聊天气泡流','翻页书页','签名区','印章区','隐藏信息层','排行榜列表','卡牌翻面','抽屉面板','顶部搜索栏','搜索框+结果列表','侧边分类栏','左右分栏','上下分屏','主次卡片布局','封面大图布局','头像信息栏','头像组横排','卡片堆叠','卡片轮播','票据明细布局','订单步骤条','物流时间线','支付确认区','二维码展示区','凭证抬头区','表格明细区','数据指标卡','环形进度','柱状统计条','雷达图占位','温度计进度','仪表盘半圆','心电图波形','标签云','关系节点图','树状目录','文件夹目录','书架网格','章节目录','阅读正文区','底部翻页器','评论区布局','点赞栏','操作菜单','悬浮按钮','快捷回复栏','输入框模拟区','弹幕横条','视频封面+信息','播放器控制栏','地图卡片列表','地点详情抽屉','日历月视图','周计划视图','今日任务列表','待办勾选列表','Kanban看板','步骤向导','问卷题卡','单选选项组','多选选项组','评分星级','滑杆选择区','签署确认区','协议条款列表','警告提示条','成功反馈页','失败反馈页','奖励领取页','抽奖结果页','盲盒开箱页','背包格子','物品详情弹窗','技能树布局','角色属性条','好感度条','聊天记录长卷','朋友圈动态流','微信列表流','小票撕纸边','票根布局','登机牌布局','会员卡布局','证件照布局','封印法阵中心','魔法书双页','侦探线索板','便签贴纸墙','拍立得相册墙','瀑布图文流','横向故事卡','纵向步骤卡','底部确认栏','顶部筛选栏','分类Tab切换','二级Tab切换','空状态提示','加载骨架屏','结果蓝框兜底'],
+ uiTexture:['圆角卡片','阴影悬浮','虚线边框','金色描边','水印背景','渐变背景','分割线','小标签','状态徽章','价格高亮','emoji图标','无图片占位','滚动容器','轻动效','纸张纹理','玻璃模糊','发光边框','霓虹光效','贴纸装饰','手账胶带','票据虚线','印章效果','二维码占位','星光粒子','暗纹背景','网格背景','金属质感','磨砂质感','像素边框','红色警示','绿色通过','锁定标识','已选标记','进度圆环','数量角标','毛玻璃顶栏','半透明浮层','内阴影','外发光','柔光边缘','渐变描边','双层边框','撕纸边缘','虚线裁剪线','票根孔洞','胶带贴纸','便利贴阴影','回形针装饰','图钉装饰','邮票齿孔','信封纹理','牛皮纸纹理','羊皮纸纹理','宣纸纹理','折痕纹理','旧纸泛黄','复古噪点','胶片颗粒','扫描线','CRT像素线','故障闪烁','终端光标','代码块背景','数据流背景','地图网格','坐标点','路线虚线','定位针','搜索高亮','热搜标签','播放进度条','弹幕标签','音频波形','唱片旋转','磁带卷轴','星级评分','爱心按钮','点赞气泡','评论气泡','聊天气泡','未读红点','在线绿点','会员皇冠','VIP徽章','折扣角标','库存角标','新品角标','售罄遮罩','已支付章','已签署章','审核通过章','风险警告章','任务完成章','奖励闪光','金币粒子','经验条','血条/蓝条','物品稀有度边框','卡牌闪粉','塔罗边框','魔法阵纹','符文边框','暗红封印','侦探红线','线索便签','医院蓝条','表格斑马纹','小票等宽字体','金额加粗','条形码占位','QR小码占位','按钮按压态','checkbox原生勾选','radio圆点选择','开关toggle','滑杆轨道','加载光泽','空状态插画','可复制文本框'],
+ uiImageRole:['不使用图片','文字头像','Emoji头像','商品图占位','顶部封面','背景氛围图','角色头像','Logo图标','水印图案','证件照','商品主图','卡牌图','地图缩略图','视频封面','二维码图','印章图','插画背景','小图标组','头像组','无图纯文字','品牌主视觉','横幅Banner','海报封面','专辑封面','书籍封面','章节插图','朋友圈配图','小红书封面','微博配图','微信头像','群聊头像','NPC头像','关系头像组','证件背景纹','票据Logo','支付二维码占位','条形码占位','地图定位图','路线缩略图','地点照片','餐品图片','菜单缩略图','产品目录图','包装产品图','样品图','颜色/材质图','物流截图占位','订单商品图','会员卡背景图','优惠券背景图','徽章图标','奖励图标','宠物头像','道具图标','背包物品图','技能图标','塔罗牌图','抽卡立绘','盲盒封面','成就徽章图','学习课程图','健康图标','天气图标','日历图标','文件图标','文件夹图标','音乐封面','播客封面','视频缩略图','相册照片','拍立得照片','情绪表情图','状态图标','安全警示图','空状态插画','加载占位图'],
+ templateType:['展示信息类','心愿清单类','购物车互动类','商品选择类','结算反馈类','报告分析类','票据账单类','角色档案类','状态监控类','抽卡占卜类','小游戏类','解谜问答类','长文阅读类','工具查询类','平台拟真类','搜索查询类','地图导航类','订单消费类','合同协议类','证件档案类','聊天记录类','任务日程类','世界书展示类','群聊生态类','关系分析类','进度追踪类','背包物品类','抽奖盲盒类','问卷选择类','公告通知类','排行榜类','手机查看类','应用入口类','浏览记录类','隐私查看类','纯查看面板类'],
+ triggerScene:['用户询问','用户查看资料','用户想购买','用户想选择','用户想推进剧情','角色主动展示','阶段总结','状态刷新','互动小游戏开始','结算完成后','用户点按钮后','用户索要报告','用户查看记录','用户要求搜索','用户要求导航','用户打开档案','用户查看订单','用户抽卡占卜','用户请求提示','用户提交答案','用户查看心愿','用户查看余额','用户查看任务','用户查看关系','角色给出选项'],
+ interactionType:['无交互','点击填入输入框','详情展开','商品详情弹窗','多选勾选','单选按钮','取消选择','总价自动计算','确认购买','购买结果填入输入框','生成下一轮','显示答案','返回上一页','刷新状态','开盲盒','抽卡','翻面','展开隐藏信息','复制结果','提交选择','请求提示','跳转搜索','打开地图','模拟付款','模拟签名','切换标签页','分页翻页','筛选分类','排序按钮','收藏/取消收藏','加入购物车','清空选择','购买成功回填','失败惩罚回填','继续游戏回填','页面切换','查看记录','打开应用','查看聊天','查看浏览记录','只读查看','无QR互动'],
+ outputBlocks:['自然回复','标题区','角色信息','简介说明','九宫格商品区','商品详情区','价格区','勾选状态','底部结算区','购买成功提示','操作按钮','明细列表','备注碎碎念','更新时间','状态标签','总价区','统计区','进度区','评分区','风险提示','签名区','印章区','评论区','弹幕区','地图区','搜索结果区','订单区','支付区','隐藏答案区','线索区','道具区','任务区','关系网区','世界观区','时间线区','封面区','正文区','分页页脚','手机桌面区','应用入口区','微信记录区','浏览器记录区','最近聊天区','最近浏览区','查看说明区','只读内容区'],
+ safeMode:['小手机兼容','标签强同步','触发词严格','禁止条件语法','禁止嵌套each','核心内容静态直显','允许交互JS','禁止外部CDN','不使用图片严格生效','字段统一映射','预览防代码化','禁止htmlTemplate嵌套整条JSON','禁止data-value金额后渲染','禁止JS渲染核心字段','允许JS只做交互','单层items数组','字段名必须与模板一致','pattern与示例标签一致','聊天融合模式','按钮回填输入框','导出前自动清理','预览前自动修复','禁止this语法','禁止else语法','禁止外链字体','禁止外链图标库'],
+ dataShape:['单对象JSON','顶层items数组','九宫格商品JSON','购物车互动JSON','选择结果JSON','状态面板JSON','报告JSON','长文JSON','纯文本','KV键值对','多按钮JSON','抽卡结果JSON','游戏状态JSON','问答线索JSON','订单票据JSON','关系节点JSON','任务列表JSON','搜索结果JSON','地图地点JSON','聊天记录JSON','证件字段JSON','QR短协议文本','QR键值摘要','QR自然语言结果','QR_JSON结果块','QR可渲染标签块','自然语言+标签块','二阶段小票JSON','支付凭证JSON','协议签署JSON','请柬回复JSON','点菜订单JSON','问卷测试JSON','评分报告JSON','剧本分支JSON','下一步指令JSON','状态更新JSON','记忆沉淀JSON','任务日程JSON','学习打卡JSON','健康打卡JSON','宠物状态JSON','背包物品JSON','投票统计JSON','反馈意见JSON','资源领取JSON','奖励成就JSON','关系好感JSON','客户跟进JSON','供应商记录JSON','预算账本JSON','旅行行程JSON','天气信息JSON','收藏书架JSON','音乐播放JSON','视频列表JSON','朋友圈动态JSON','微信支付凭证JSON','物流追踪JSON','产品目录JSON','报价单JSON','售后工单JSON','日历事件JSON','时间线事件JSON','排行榜JSON','图鉴收藏JSON','多页章节JSON','弹窗提示JSON','可复制文本块','视觉回显结果','手机桌面JSON','应用入口JSON','浏览记录JSON','只读展示JSON'],
+ fieldPack:['通用卡片字段','商品字段包','心愿单字段包','购物结算字段包','角色档案字段包','状态数值字段包','报告分析字段包','小游戏字段包','按钮字段包','证件字段包','订单票据字段包','搜索结果字段包','地图地点字段包','抽卡占卜字段包','解谜线索字段包','任务日程字段包','关系分析字段包','聊天记录字段包','长文分页字段包','背包物品字段包','进度评分字段包','签署协议字段包','QR协议字段包','QR回填字段包','二阶段标签字段包','小票凭证字段包','支付状态字段包','订单明细字段包','商品SKU字段包','价格库存字段包','优惠券字段包','收货物流字段包','客户跟进字段包','供应商档案字段包','报价单字段包','发票账单字段包','产品目录字段包','样品记录字段包','售后工单字段包','学习打卡字段包','课程进度字段包','错题反馈字段包','健康数据字段包','运动记录字段包','饮水睡眠字段包','宠物喂养字段包','宠物状态字段包','背包道具字段包','奖励成就字段包','投票统计字段包','反馈意见字段包','资源下载字段包','提醒闹钟字段包','日历日程字段包','旅行行程字段包','天气预报字段包','预算账本字段包','关系好感字段包','纪念日字段包','请柬邀约字段包','协议条款字段包','签名印章字段包','剧本选项字段包','剧情分支字段包','阅读章节字段包','藏书阁字段包','搜索查询字段包','导航路线字段包','社交动态字段包','朋友圈评论字段包','微信列表字段包','音乐播放字段包','视频条目字段包','排行榜字段包','图鉴收藏字段包','状态检测字段包','情绪指标字段包','仪表盘字段包','可复制结果字段包','错误兜底字段包','手机应用字段包','浏览记录字段包','聊天摘要字段包','只读展示字段包'],
+ actionPack:['无按钮','单按钮','多按钮','详情按钮','选择按钮','购买按钮','结算按钮','data-fill回填','购买结果回填','下一步按钮','抽卡按钮','重抽按钮','确认按钮','取消按钮','返回按钮','刷新按钮','显示答案按钮','请求提示按钮','提交选择按钮','开盲盒按钮','模拟付款按钮','模拟签名按钮','加入购物车按钮','清空选择按钮','继续游戏按钮','查看详情按钮','关闭弹窗按钮','QR回填按钮','QR确认按钮','QR复制按钮','QR发送提示按钮','data-fill固定按钮','button data-fill按钮','AI选项按钮','动态汇总按钮','提交表单按钮','提交问卷按钮','生成小票按钮','生成凭证按钮','生成报告按钮','更新状态按钮','保存记忆按钮','创建任务按钮','设置提醒按钮','完成打卡按钮','领取奖励按钮','兑换优惠券按钮','加入背包按钮','使用物品按钮','提交投票按钮','提交反馈按钮','领取资源按钮','开始导航按钮','提交搜索按钮','点赞按钮','评论按钮','回复按钮','接受邀请按钮','拒绝邀请按钮','签署协议按钮','拒绝签署按钮','查看条款按钮','下载按钮','复制链接按钮','展开全文按钮','收起按钮','翻页上一页','翻页下一页','切换标签按钮','筛选按钮','排序按钮','收藏按钮','取消收藏按钮','上传信息按钮','确认支付按钮','取消支付按钮','查看物流按钮','生成订单按钮','确认收货按钮','售后申请按钮','客户跟进按钮','供应商记录按钮','报价确认按钮','预算记录按钮','关系更新按钮','好感增加按钮','隐藏结果按钮','显示结果按钮','结果蓝框兜底','手动复制提示','查看按钮','打开应用按钮','返回主页按钮','只读切换按钮'],
+ outputFormat:['只输出卡片','自然回复+卡片','自然回复+QR','QR文本+二阶段标签','卡片内显示结果','弹窗显示结果','蓝框显示结果','可复制文本框','系统回执格式','小票凭证格式','协议文书格式','报告总结格式','聊天消息格式','任务清单格式','时间线格式','表格明细格式','列表摘要格式','剧情旁白格式','指令协议格式','极短暗号格式','只读卡片展示','自然回复+只读卡片'],
+ resultRole:['用户发送给角色','角色生成给用户','双方都可渲染','仅视觉展示','仅作为Prompt提示','作为记忆线索','作为任务指令','作为状态更新','作为订单凭证','作为剧情分支','作为工具请求','作为报告结果'],
+ secondStage:['无二阶段','生成小票页','生成凭证页','生成下一页','生成角色反应','生成状态卡','生成报告页','生成任务页','生成关系更新','生成剧情后续','生成搜索结果','生成地图结果','生成订单详情','生成协议回执','生成打卡总结','生成奖励领取页','生成错误兜底页','无后续生成'],
+ contentLength:['极短内容','短内容','中等内容','长内容','9项商品','12项商品','20项以内','多页内容','3条记录','5条记录','8条记录','10条记录','单页卡片','两页卡片','三页以上','长列表滚动','短列表','完整报告','简短报告','1个按钮','2个按钮','3个按钮','4个按钮','5个按钮','6个按钮以上','单条QR','短QR一行','QR三行以内','完整QR摘要','单件商品','3件商品','5件商品','全部商品','单页小票','完整小票','订单明细','支付凭证','协议全文','协议摘要','请柬短文','邀请长文','问卷3题','问卷5题','问卷10题','测试结果短版','测试结果长版','学习打卡短版','健康报告短版','任务清单短版','日程周计划','客户跟进短记','客户完整档案','搜索3条结果','搜索5条结果','地图3地点','物流3节点','时间线5节点','聊天记录10条','朋友圈5条','书架6本','章节3页','背包9格','排行榜10名','图鉴12项','预算月报','旅行3天','天气7天','可复制短文本','可复制完整文本','兜底提示短版']
+};
+const SINGLE={runMode:true,dataShape:true,contentLength:true,resultRole:true,secondStage:true};let state={};let currentRule=null;let timer=null;
+function $(id){return document.getElementById(id)}
+function toast(t){let el=$('toast');el.textContent=t;el.style.display='block';clearTimeout(timer);timer=setTimeout(()=>el.style.display='none',2400)}
+function renderTags(){Object.entries(TAGS).forEach(([id,arr],idx)=>{let box=$(id);if(!box)return;box.innerHTML='';arr.forEach(x=>{let s=document.createElement('span');s.className='tag '+(['','blue','green','gold','purple'][idx%5]);s.textContent=x;s.onclick=()=>{if(SINGLE[id]){state[id]=[x];[...box.children].forEach(c=>c.classList.remove('on'));s.classList.add('on')}else{state[id]=state[id]||[];if(state[id].includes(x)){state[id]=state[id].filter(v=>v!==x);s.classList.remove('on')}else{state[id].push(x);s.classList.add('on')}};refreshByTags(false)};box.appendChild(s)})})}
+function getSel(id){return state[id]||[]}function has(id,v){return getSel(id).includes(v)}function selectedTagsSummary(){let out={};Object.keys(TAGS).forEach(k=>{if(getSel(k).length)out[k]=getSel(k)});return out}
+function syncPattern(){let tag=($('tagName').value||'custom-card').trim().replace(/[<>\s]/g,'')||'custom-card';$('tagName').value=tag;$('pattern').value='<'+tag+'>([\\s\\S]*?)</'+tag+'>'}
+function apiConfig(){
+  let base=($('apiBase').value.trim()||localStorage.getItem('ql_api_base')||'');
+  base=base.replace(/\/+$/,'').replace(/\/chat\/completions$/,'').replace(/\/models$/,'');
+  if(base==='https://api.openai.com')base='https://api.openai.com/v1';
+  let model=($('model').value.trim()||$('modelSelect').value||localStorage.getItem('ql_model')||'').trim();
+  let key=($('apiKey').value.trim()||localStorage.getItem('ql_key')||'').trim();
+  return{base,key,model}
+}
+function saveApiWorldBook(){localStorage.setItem('ql_api_base',$('apiBase').value.trim());localStorage.setItem('ql_key',$('apiKey').value.trim());localStorage.setItem('ql_model',$('model').value.trim()||$('modelSelect').value);localStorage.setItem('ql_worldbook',$('worldBook').value);toast('已保存')}
+function selectModel(){if($('modelSelect').value)$('model').value=$('modelSelect').value}
+async function fetchModels(){let cfg=apiConfig();if(!cfg.base||!cfg.key){toast('请先填写 API Base URL 和 Key');return}try{let r=await fetch(cfg.base+'/models',{headers:{Authorization:'Bearer '+cfg.key}});let j=await r.json();if(!r.ok)throw new Error(j?.error?.message||r.statusText);let arr=(j.data||[]).map(x=>x.id).filter(Boolean);$('modelSelect').innerHTML='<option value="">请选择模型</option>'+arr.map(id=>`<option value="${id}">${id}</option>`).join('');toast('模型已拉取')}catch(e){toast('拉取失败：'+e.message)}}
+async function testApi(){let cfg=apiConfig();if(!cfg.base||!cfg.key||!cfg.model){toast('缺少 API / Key / Model');return}try{let r=await fetch(cfg.base+'/chat/completions',{method:'POST',headers:{Authorization:'Bearer '+cfg.key,'Content-Type':'application/json'},body:JSON.stringify({model:cfg.model,messages:[{role:'user',content:'test'}],max_tokens:5})});let j=await r.json();if(!r.ok)throw new Error(j?.error?.message||r.statusText);toast('API 连接成功')}catch(e){toast('测试失败：'+e.message)}}
+function loadDefaultWorldBook(){ $('worldBook').value='所有正则必须适配糯叽机/小手机。pattern、aiPrompt 示例和 sampleContent 的标签名必须完全一致。触发词只使用用户填写内容，不自动扩展。AI 回复采用聊天融合模式：先自然回复 1-3 句，再另起一行输出标签块。静态展示模式中，标题、金额、图标、列表等核心内容必须用模板占位符直接显示，禁止依赖 JS 后渲染。互动小应用模式允许使用 JS 做点击、选择、弹窗、总价计算和 parent.postMessage 回填输入框，但商品名称、价格、描述、按钮初始文本必须静态显示在 HTML 里。购物/心愿单多选必须用原生 checkbox + label + CSS :checked，禁止只靠 div onclick/addEventListener 切换 .on class。禁止外部 CDN、FontAwesome、GSAP、Google Fonts、@import。禁止 {{#if}}、{{else}}、{{/if}}、{{this.xxx}}、{{../1.xxx}}。最多使用一个 {{#each:1.items}} 循环，禁止嵌套 each。';toast('已填入默认世界书')}
+function basicInfoText(){return [$('userNeed').value,$('extraNeed').value,$('ruleName').value,$('category').value,$('tagName').value,$('triggerKeywords').value].join('\n')}
+const INTERACTIVE_TAG_OPTIONS={
+ interactionAuto:[
+  {value:'auto',label:'自动识别需求'},
+  {value:'manual',label:'手动选择标签'}
+ ],
+ interactionPreset:[
+  {value:'auto_detect',label:'按需求自动判断'},
+  {value:'shopping_receipt',label:'购物QR → 小票'},
+  {value:'shopping_tell',label:'购物QR → 告诉角色'},
+  {value:'shopping_success',label:'购物页 → 只显示成功'},
+  {value:'choice_result',label:'选择QR → 发送结果'},
+  {value:'dynamic_summary',label:'动态结算QR'},
+  {value:'game_next',label:'小游戏QR → 下一步'},
+  {value:'form_result',label:'表单/问卷QR'},
+  {value:'agreement_sign',label:'协议签署QR'},
+  {value:'invitation_reply',label:'请柬邀约QR'},
+  {value:'payment_voucher',label:'支付凭证QR'},
+  {value:'search_request',label:'搜索/地图QR'},
+  {value:'social_action',label:'社交互动QR'},
+  {value:'reader_choice',label:'阅读/剧本选择QR'},
+  {value:'status_report',label:'状态检测QR'},
+  {value:'schedule_task',label:'日程任务QR'},
+  {value:'memory_save',label:'记忆沉淀QR'},
+  {value:'learning_checkin',label:'学习打卡QR'},
+  {value:'health_checkin',label:'健康运动QR'},
+  {value:'pet_interaction',label:'宠物互动QR'},
+  {value:'inventory_bag',label:'背包物品QR'},
+  {value:'vote_poll',label:'投票统计QR'},
+  {value:'feedback_collect',label:'反馈意见QR'},
+  {value:'resource_claim',label:'资源领取QR'},
+  {value:'achievement_reward',label:'成就奖励QR'},
+  {value:'relationship_update',label:'关系好感QR'},
+  {value:'reminder_alarm',label:'提醒闹钟QR'},
+  {value:'coupon_claim',label:'优惠券兑换QR'},
+  {value:'customer_followup',label:'客户跟进QR'},
+  {value:'inner_switch',label:'纯卡片内切换'}
+ ],
+ purchaseFlow:[
+  {value:'success_only',label:'只显示支付成功'},
+  {value:'tell_text',label:'告诉角色文字'},
+  {value:'receipt_stage',label:'生成二阶段小票'},
+  {value:'reaction_receipt',label:'角色反应 + 小票'},
+  {value:'voucher_only',label:'只生成凭证'},
+  {value:'confirm_then_qr',label:'确认后生成QR'},
+  {value:'save_to_memory',label:'发送后记住'},
+  {value:'update_status_after',label:'发送后更新状态'},
+  {value:'create_task_after',label:'发送后创建任务'},
+  {value:'unlock_next_after',label:'发送后解锁下一步'},
+  {value:'reward_after',label:'发送后发放奖励'}
+ ],
+ qrMode:[
+  {value:'none',label:'不需要QR'},
+  {value:'fixed_reply',label:'固定按钮QR'},
+  {value:'ai_options',label:'AI选项QR'},
+  {value:'dynamic_summary',label:'动态汇总QR'},
+  {value:'two_stage',label:'二阶段标签QR'},
+  {value:'state_update',label:'状态更新QR'},
+  {value:'command_protocol',label:'指令协议QR'},
+  {value:'receipt_protocol',label:'凭证回执QR'},
+  {value:'memory_protocol',label:'记忆写入QR'},
+  {value:'task_protocol',label:'任务创建QR'},
+  {value:'poll_protocol',label:'投票统计QR'},
+  {value:'reward_protocol',label:'奖励发放QR'},
+  {value:'branch_protocol',label:'剧情分支QR'},
+  {value:'tool_request',label:'工具请求QR'},
+  {value:'visual_only',label:'仅视觉互动'}
+ ],
+ qrCarrier:[
+  {value:'none',label:'不回填'},
+  {value:'data_fill',label:'data-fill按钮'},
+  {value:'button_fill',label:'button data-fill'},
+  {value:'option_fill',label:'AI options fill'},
+  {value:'js_postmessage',label:'JS postMessage'},
+  {value:'hybrid_fill',label:'data-fill + JS兜底'},
+  {value:'textarea_fill',label:'textarea直填'},
+  {value:'clipboard_fallback',label:'剪贴板兜底'},
+  {value:'visible_text_fallback',label:'页面显示文本兜底'},
+  {value:'copy_button',label:'复制按钮兜底'},
+  {value:'qr_text_area',label:'可复制结果框'},
+  {value:'manual_template',label:'手动发送模板'},
+  {value:'internal_tabs',label:'卡片内切换'},
+  {value:'modal_result',label:'弹窗显示结果'},
+  {value:'toast_result',label:'Toast提示结果'}
+ ],
+ qrPayload:[
+  {value:'short_protocol',label:'短QR协议'},
+  {value:'natural_text',label:'自然语言结果'},
+  {value:'kv_summary',label:'键值摘要'},
+  {value:'json_block',label:'JSON结果块'},
+  {value:'tag_block',label:'可渲染标签块'},
+  {value:'text_plus_tag',label:'自然语言+标签'},
+  {value:'receipt_text',label:'支付/订单凭证'},
+  {value:'choice_text',label:'选择结果文本'},
+  {value:'score_text',label:'测试分数结果'},
+  {value:'signed_text',label:'签署确认文本'},
+  {value:'search_query_text',label:'搜索/导航请求'},
+  {value:'task_text',label:'任务/日程文本'},
+  {value:'memory_text',label:'记忆沉淀文本'},
+  {value:'checkin_text',label:'打卡结果文本'},
+  {value:'health_text',label:'健康数据文本'},
+  {value:'poll_text',label:'投票结果文本'},
+  {value:'reward_text',label:'奖励领取文本'},
+  {value:'relationship_text',label:'关系变化文本'},
+  {value:'inventory_text',label:'背包物品文本'},
+  {value:'feedback_text',label:'反馈意见文本'},
+  {value:'coupon_text',label:'优惠兑换文本'},
+  {value:'customer_note_text',label:'客户跟进文本'}
+ ],
+ qrAfterAction:[
+  {value:'role_reply',label:'角色自然回应'},
+  {value:'render_receipt',label:'生成小票/凭证'},
+  {value:'next_page',label:'生成下一页'},
+  {value:'continue_plot',label:'推进剧情'},
+  {value:'update_status',label:'更新状态卡'},
+  {value:'open_detail',label:'展开详情说明'},
+  {value:'save_memory_hint',label:'提示角色记住'},
+  {value:'generate_report',label:'生成报告'},
+  {value:'show_payment_result',label:'显示支付结果'},
+  {value:'create_task',label:'创建待办/日程'},
+  {value:'add_note',label:'追加笔记/记录'},
+  {value:'unlock_branch',label:'解锁剧情分支'},
+  {value:'give_reward',label:'发放奖励'},
+  {value:'update_relationship',label:'更新关系/好感'},
+  {value:'summarize_result',label:'总结结果'},
+  {value:'ask_followup',label:'追问下一步'},
+  {value:'no_ai',label:'不进入AI'}
+ ],
+ qrScene:[
+  {value:'general',label:'通用互动'},
+  {value:'wishlist',label:'心愿单/购物'},
+  {value:'menu_order',label:'点菜/订单'},
+  {value:'invitation',label:'请柬/赴约'},
+  {value:'agreement',label:'协议/签名'},
+  {value:'quiz',label:'问卷/测试'},
+  {value:'script_play',label:'剧本/选项'},
+  {value:'game',label:'小游戏/抽卡'},
+  {value:'search',label:'搜索/地图'},
+  {value:'social',label:'朋友圈/微信'},
+  {value:'reader',label:'阅读/藏书阁'},
+  {value:'status_detector',label:'状态/情绪检测'},
+  {value:'payment',label:'支付/消费凭证'},
+  {value:'task',label:'任务/日程'},
+  {value:'relationship',label:'关系/好感'},
+  {value:'learning',label:'学习/作业'},
+  {value:'health',label:'健康/运动'},
+  {value:'pet',label:'宠物互动'},
+  {value:'inventory',label:'背包/物品栏'},
+  {value:'memory',label:'记忆/笔记'},
+  {value:'vote',label:'投票/社群'},
+  {value:'feedback',label:'反馈/意见'},
+  {value:'resource',label:'资源/下载'},
+  {value:'reward',label:'成就/奖励'},
+  {value:'customer',label:'客户/CRM'},
+  {value:'supplier',label:'供应商/订单'},
+  {value:'reminder',label:'提醒/闹钟'},
+  {value:'travel',label:'旅行/行程'},
+  {value:'finance',label:'账单/预算'},
+  {value:'collection',label:'收藏/书架'}
+ ],
+ qrTriggerAction:[
+  {value:'button_click',label:'点击按钮'},
+  {value:'single_choice',label:'单选'},
+  {value:'multi_choice',label:'多选'},
+  {value:'submit_form',label:'提交表单'},
+  {value:'checkout',label:'结算/购买'},
+  {value:'sign_confirm',label:'签名确认'},
+  {value:'accept_decline',label:'接受/拒绝'},
+  {value:'refresh_request',label:'刷新/重抽'},
+  {value:'next_step',label:'下一步'},
+  {value:'open_result',label:'查看结果'},
+  {value:'copy_result',label:'复制结果'},
+  {value:'search_submit',label:'提交搜索'},
+  {value:'map_navigate',label:'开始导航'},
+  {value:'like_comment',label:'点赞/评论'},
+  {value:'pay_confirm',label:'确认支付'},
+  {value:'checkin',label:'打卡'},
+  {value:'complete_task',label:'完成任务'},
+  {value:'set_reminder',label:'设置提醒'},
+  {value:'claim_reward',label:'领取奖励'},
+  {value:'save_memory',label:'保存记忆'},
+  {value:'add_to_bag',label:'加入背包'},
+  {value:'use_item',label:'使用物品'},
+  {value:'vote_submit',label:'提交投票'},
+  {value:'feedback_submit',label:'提交反馈'},
+  {value:'download_claim',label:'领取资源'},
+  {value:'upload_info',label:'上传/提交信息'},
+  {value:'long_press',label:'长按触发'},
+  {value:'swipe_select',label:'滑动选择'},
+  {value:'time_trigger',label:'时间触发'},
+  {value:'manual_copy',label:'手动复制'}
+ ],
+ qrResultType:[
+  {value:'operation_result',label:'操作结果'},
+  {value:'purchase_done',label:'购买完成'},
+  {value:'order_summary',label:'订单摘要'},
+  {value:'payment_success',label:'支付成功'},
+  {value:'choice_result',label:'选择结果'},
+  {value:'quiz_score',label:'测试结算'},
+  {value:'signed_agreement',label:'协议已签'},
+  {value:'invitation_reply',label:'赴约回复'},
+  {value:'plot_branch',label:'剧情分支'},
+  {value:'search_request',label:'搜索请求'},
+  {value:'navigation_request',label:'导航请求'},
+  {value:'status_update',label:'状态更新'},
+  {value:'memory_note',label:'记忆提示'},
+  {value:'task_created',label:'任务创建'},
+  {value:'social_reply',label:'社交回复'},
+  {value:'checkin_result',label:'打卡结果'},
+  {value:'health_data',label:'健康数据'},
+  {value:'study_done',label:'学习完成'},
+  {value:'pet_status',label:'宠物状态'},
+  {value:'inventory_change',label:'物品变化'},
+  {value:'poll_result',label:'投票结果'},
+  {value:'feedback_result',label:'反馈提交'},
+  {value:'resource_link',label:'资源链接'},
+  {value:'reward_claimed',label:'奖励已领'},
+  {value:'relationship_change',label:'关系变化'},
+  {value:'reminder_set',label:'提醒已设'},
+  {value:'schedule_created',label:'日程已建'},
+  {value:'customer_followup',label:'客户跟进'},
+  {value:'supplier_record',label:'供应商记录'},
+  {value:'budget_record',label:'预算记录'}
+ ],
+ qrTone:[
+  {value:'role_readable_soft',label:'角色可读温柔'},
+  {value:'system_receipt',label:'系统回执'},
+  {value:'formal_notice',label:'正式通知'},
+  {value:'cute_chat',label:'可爱聊天'},
+  {value:'command_style',label:'指令协议'},
+  {value:'receipt_style',label:'小票凭证'},
+  {value:'dramatic_plot',label:'剧情旁白'},
+  {value:'contract_style',label:'契约文书'},
+  {value:'wechat_style',label:'微信消息'},
+  {value:'minimal_qr',label:'极短QR码'},
+  {value:'playful_joke',label:'幽默轻松'},
+  {value:'teacher_style',label:'教学口吻'},
+  {value:'encourage_style',label:'鼓励打卡'},
+  {value:'game_style',label:'游戏系统'},
+  {value:'medical_note',label:'检测报告'},
+  {value:'customer_service',label:'客服话术'},
+  {value:'business_record',label:'商务记录'},
+  {value:'diary_note',label:'日记记录'},
+  {value:'secret_code',label:'秘密暗号'},
+  {value:'romantic_note',label:'恋爱便签'}
+ ],
+ qrSafety:[
+  {value:'confirm_before_fill',label:'确认后回填'},
+  {value:'no_auto_send',label:'禁止自动发送'},
+  {value:'one_line_qr',label:'QR尽量一行'},
+  {value:'stable_pattern',label:'稳定pattern'},
+  {value:'role_readable',label:'角色可读'},
+  {value:'fallback_visual',label:'失败显示文本兜底'},
+  {value:'avoid_inline',label:'避免inline掉格式'},
+  {value:'iframe_first',label:'优先iframe'},
+  {value:'no_nested_json',label:'避免复杂嵌套JSON'},
+  {value:'button_text_clear',label:'按钮文案清楚'},
+  {value:'manual_send_hint',label:'提示用户手动发送'},
+  {value:'separate_visual_and_qr',label:'视觉与QR分离'},
+  {value:'checkbox_native',label:'多选用原生checkbox'},
+  {value:'static_core_fields',label:'核心字段静态直显'},
+  {value:'no_silent_action',label:'禁止静默执行'},
+  {value:'short_payload',label:'回填内容不要过长'},
+  {value:'escape_quotes',label:'转义引号换行'},
+  {value:'no_external_cdn',label:'禁止外部CDN'},
+  {value:'copy_fallback',label:'提供复制兜底'},
+  {value:'test_button_first',label:'先放测试按钮'},
+  {value:'role_both_for_second',label:'二阶段role=both'},
+  {value:'avoid_auto_reload',label:'避免自动刷新'}
+ ]
+};
+function renderInteractiveSettingTags(){
+  Object.entries(INTERACTIVE_TAG_OPTIONS).forEach(([id,opts],idx)=>{
+    let box=$(id+'Tags'); if(!box)return; box.innerHTML='';
+    opts.forEach(opt=>{let s=document.createElement('span');s.className='tag '+(['purple','blue','green'][idx%3]);s.dataset.value=opt.value;s.textContent=opt.label;s.onclick=()=>setInteractiveSetting(id,opt.value,true);box.appendChild(s)});
+  });
+  syncInteractiveSettingTags();
+}
+function setInteractiveSetting(id,value,userAction=false){
+  let el=$(id); if(!el)return; el.value=value; syncInteractiveSettingTags();
+  if(!userAction)return;
+  if(id==='interactionAuto'){
+    if(value==='auto')applyInteractionFromNeed(true); else {setInteractionStatus('<b>已切换为手动互动标签。</b><br>• 你可以直接点“互动类型预设”和“购买后行为”标签。');refreshByTags(false)}
+  }else if(id==='interactionPreset'){
+    applyPreset(value,true,true);
+  }else if(id==='purchaseFlow'){
+    if($('interactionAuto'))$('interactionAuto').value='manual';
+    let label=(INTERACTIVE_TAG_OPTIONS.purchaseFlow.find(x=>x.value===value)||{}).label||value;
+    setInteractionStatus('<b style="color:#2c9b66">已手动选择购买后行为：</b>'+label+'。');
+    syncInteractiveSettingTags();refreshByTags(false);
+  }else if(['qrMode','qrCarrier','qrPayload','qrAfterAction','qrScene','qrTriggerAction','qrResultType','qrTone','qrSafety'].includes(id)){
+    if($('interactionAuto'))$('interactionAuto').value='manual';
+    let opt=(INTERACTIVE_TAG_OPTIONS[id]||[]).find(x=>x.value===value)||{};
+    setInteractionStatus('<b style="color:#2c9b66">已手动选择 QR 标签：</b>'+ (opt.label||value) +'。');
+    syncInteractiveSettingTags();refreshByTags(false);
+  }
+}
+function syncInteractiveSettingTags(){
+  Object.entries(INTERACTIVE_TAG_OPTIONS).forEach(([id,opts])=>{
+    let box=$(id+'Tags'), el=$(id); if(!box||!el)return;
+    [...box.children].forEach(c=>c.classList.toggle('on',c.dataset.value===el.value));
+  });
+  let badge=$('interactionModeBadge');
+  if(badge){
+    let preset=(INTERACTIVE_TAG_OPTIONS.interactionPreset.find(x=>x.value===($('interactionPreset')?.value||''))||{}).label||'按需求自动判断';
+    let flow=(INTERACTIVE_TAG_OPTIONS.purchaseFlow.find(x=>x.value===purchaseFlowMode())||{}).label||purchaseFlowMode();
+    let qm=(INTERACTIVE_TAG_OPTIONS.qrMode.find(x=>x.value===qrMode())||{}).label||qrMode();
+    let qc=(INTERACTIVE_TAG_OPTIONS.qrCarrier.find(x=>x.value===qrCarrier())||{}).label||qrCarrier();
+    let qp=(INTERACTIVE_TAG_OPTIONS.qrPayload.find(x=>x.value===qrPayload())||{}).label||qrPayload();
+    let qa=(INTERACTIVE_TAG_OPTIONS.qrAfterAction.find(x=>x.value===qrAfterAction())||{}).label||qrAfterAction();
+    let qs=(INTERACTIVE_TAG_OPTIONS.qrScene.find(x=>x.value===qrScene())||{}).label||qrScene();
+    let qr=(INTERACTIVE_TAG_OPTIONS.qrResultType.find(x=>x.value===qrResultType())||{}).label||qrResultType();
+    badge.innerHTML='当前：<b>'+preset+'</b><br>购买后：<b>'+flow+'</b><br>场景：<b>'+qs+'</b>｜结果：<b>'+qr+'</b><br>QR：<b>'+qm+'</b>｜<b>'+qc+'</b><br>内容：<b>'+qp+'</b> → <b>'+qa+'</b>';
+  }
+}
+function needText(){return (($('userNeed')?.value||'')+'\n'+($('extraNeed')?.value||'')).toLowerCase()}
+
+function isViewOnlyNeed(){
+  let t=needText();
+  let view=/查看|查手机|看手机|仿照手机|手机页面|手机界面|解锁|浏览记录|聊天记录|微信记录|打开微信|打开浏览器|最近的聊天|最近浏览|只看|仅查看|展示页面|查看资料|查看记录|看记录/.test(t);
+  let action=/购买|结算|下单|支付|小票|生成小票|告诉角色|发送给角色|让角色知道|回填|data-fill|qr|quick reply|提交|签署|投票|打卡|领取|创建任务|保存记忆|下一步|推进剧情|选择结果|测试结算/.test(t);
+  return view && !action;
+}
+function applyViewOnlyPreset(show=false){
+  if($('interactionAuto'))$('interactionAuto').value='manual';
+  if($('interactionPreset'))$('interactionPreset').value='inner_switch';
+  if($('purchaseFlow'))$('purchaseFlow').value='success_only';
+  setQrSettings('none','none','natural_text','no_ai','iframe_first','general','button_click','operation_result','role_readable_soft');
+  if($('secondaryInstruction'))$('secondaryInstruction').value='这是只读查看型正则：只渲染可浏览/可切换的页面，不生成 QR，不回填输入框，不要求角色根据点击结果继续。';
+  setTags({
+    runMode:['查看展示模式'],
+    uiContainer:['手机界面','微信列表界面','浏览器窗口','聊天记录页'],
+    uiStyle:['iOS拟真','微信拟真','极简白卡'],
+    uiLayout:['顶部状态栏','应用入口区','底部导航栏','分页切换','聊天记录长卷'],
+    uiTexture:['毛玻璃顶栏','圆角卡片','未读红点','在线绿点'],
+    uiImageRole:['不使用图片'],
+    templateType:['手机查看类','应用入口类','浏览记录类','纯查看面板类'],
+    triggerScene:['用户查看记录','用户打开档案'],
+    interactionType:['页面切换','打开应用','查看聊天','查看浏览记录','只读查看','无QR互动'],
+    outputBlocks:['自然回复','手机桌面区','应用入口区','微信记录区','浏览器记录区','最近聊天区','最近浏览区','只读内容区'],
+    safeMode:['小手机兼容','标签强同步','触发词严格','核心内容静态直显','允许JS只做交互'],
+    dataShape:['手机桌面JSON'],
+    fieldPack:['手机应用字段包','浏览记录字段包','聊天摘要字段包'],
+    actionPack:['查看按钮','打开应用按钮','返回主页按钮','只读切换按钮'],
+    outputFormat:['自然回复+只读卡片'],
+    resultRole:['角色生成给用户'],
+    secondStage:['无二阶段'],
+    contentLength:['中等内容']
+  });
+  setInteractionStatus('<b style="color:#2c9b66">已识别：只读查看型正则。</b><br>• 不生成 QR。<br>• 不回填输入框。<br>• 只做手机页面/应用入口/聊天记录/浏览记录的展示与卡片内切换。');
+  syncInteractiveSettingTags();
+  refreshByTags(false);
+  if(show)toast('已应用只读查看型设置');
+}
+function inferInteractionPreset(){
+  let t=needText();
+  if(isViewOnlyNeed())return 'inner_switch';
+  if(/仅视觉|只切换|卡片内|不发送|不回填/.test(t))return 'inner_switch';
+  if(/协议|签署|签名|合同|契约|条款/.test(t))return 'agreement_sign';
+  if(/请柬|邀请|赴约|拒绝|婚礼|邀约/.test(t))return 'invitation_reply';
+  if(/支付|付款|凭证|小票|账单|收款方/.test(t)&&!/心愿单|购物车/.test(t))return 'payment_voucher';
+  if(/搜索|谷歌|地图|导航|地点|路线/.test(t))return 'search_request';
+  if(/朋友圈|微信|评论|点赞|私聊|群聊/.test(t))return 'social_action';
+  if(/藏书阁|阅读|章节|剧本|场记|导演|选择剧情/.test(t))return 'reader_choice';
+  if(/情绪|检测|状态|仪表盘|分数|测试结果/.test(t))return 'status_report';
+  if(/日程|待办|任务|提醒|闹钟|计划/.test(t))return 'schedule_task';
+  if(/记忆|记住|笔记|记录|沉淀/.test(t))return 'memory_save';
+  if(/学习|作业|课程|背单词|打卡/.test(t))return 'learning_checkin';
+  if(/健康|运动|喝水|睡眠|体重|步数/.test(t))return 'health_checkin';
+  if(/宠物|猫|狗|喂食|撸猫|陪玩/.test(t))return 'pet_interaction';
+  if(/背包|物品|道具|库存|装备/.test(t))return 'inventory_bag';
+  if(/投票|票选|统计|社群/.test(t))return 'vote_poll';
+  if(/反馈|意见|建议|评价/.test(t))return 'feedback_collect';
+  if(/资源|下载|领取|链接|附件/.test(t))return 'resource_claim';
+  if(/成就|奖励|徽章|积分|兑换|优惠券/.test(t))return 'achievement_reward';
+  if(/关系|好感|亲密度|羁绊/.test(t))return 'relationship_update';
+  if(/客户|crm|跟进|供应商|订单记录/.test(t))return 'customer_followup';
+  if(/购物|购买|结算|商品|心愿单|礼物|淘宝|购物车|九宫格|9宫格/.test(t)){
+    if(/小票|receipt|票据|订单|凭证|二阶段|再次调用|再次生成|生成小票|发给角色.*小票|发送给角色.*小票/.test(t))return 'shopping_receipt';
+    if(/告诉角色|发送给角色|让角色知道|回填|输入框|data-fill|qr|quick reply|quick response/.test(t))return 'shopping_tell';
+    return 'shopping_success';
+  }
+  if(/点菜|菜单|加入购物车|总价|合计|结算|动态汇总/.test(t))return 'dynamic_summary';
+  if(/选择|选项|投票|单选|多选|提交选择|选择结果|data-fill|qr/.test(t))return 'choice_result';
+  if(/小游戏|游戏|下一步|继续游戏|闯关|抽卡|开盲盒/.test(t))return 'game_next';
+  if(/问卷|表单|填写|提交|汇总|测试题|检测/.test(t))return 'form_result';
+  return 'auto_detect';
+}
+function setInteractionStatus(html){let el=$('interactionDetectOut');if(el)el.innerHTML=html}
+function applyInteractionFromNeed(show=false){let auto=$('interactionAuto')?.value||'auto';if(isViewOnlyNeed()){applyViewOnlyPreset(show);return}let preset=inferInteractionPreset();if($('interactionPreset')&&auto==='auto')$('interactionPreset').value=preset;applyPreset(preset,show,false)}
+function setQrSettings(mode,carrier,payload,after,safety,scene,trigger,result,tone){
+  if($('qrMode'))$('qrMode').value=mode||'none';
+  if($('qrCarrier'))$('qrCarrier').value=carrier||'none';
+  if($('qrPayload'))$('qrPayload').value=payload||'short_protocol';
+  if($('qrAfterAction'))$('qrAfterAction').value=after||'role_reply';
+  if($('qrSafety'))$('qrSafety').value=safety||'confirm_before_fill';
+  if($('qrScene'))$('qrScene').value=scene||'general';
+  if($('qrTriggerAction'))$('qrTriggerAction').value=trigger||'button_click';
+  if($('qrResultType'))$('qrResultType').value=result||'operation_result';
+  if($('qrTone'))$('qrTone').value=tone||'role_readable_soft';
+}
+function applyPreset(preset,show=true,forceManual=true){
+  if(forceManual&&$('interactionPreset'))$('interactionPreset').value=preset;
+  if(forceManual&&$('interactionAuto'))$('interactionAuto').value='manual';
+  let msg='';
+  if(preset==='shopping_receipt'){
+    if($('purchaseFlow'))$('purchaseFlow').value='receipt_stage';
+    if($('receiptTag')&&!$('receiptTag').value.trim())$('receiptTag').value='receipt-card';
+    setQrSettings('two_stage','hybrid_fill','text_plus_tag','render_receipt','confirm_before_fill','wishlist','checkout','purchase_done','receipt_style');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='点击生成小票后，生成【QR_心愿单购买】结构化回复，包含收礼人、商品清单、合计金额和支付状态；用户发送后，AI 不要再生成购物车，而是先以角色口吻回应，再输出 <'+receiptTag()+'>...</'+receiptTag()+'> 小票页面。';
+    setTags({runMode:['互动小应用模式'],uiContainer:['购物车页面','商品九宫格','商品详情页','底部结算栏'],uiStyle:['购物平台风','奶油柔和'],uiLayout:['九宫格布局','3×3宫格','商品卡片网格','详情弹窗','底部固定栏','总价栏','购买成功页'],uiImageRole:['不使用图片'],templateType:['心愿清单类','购物车互动类','商品选择类','结算反馈类','票据账单类'],triggerScene:['用户想购买','结算完成后','用户点按钮后'],interactionType:['商品详情弹窗','多选勾选','总价自动计算','确认购买','购买结果填入输入框'],outputBlocks:['自然回复','九宫格商品区','商品详情区','价格区','底部结算区','购买成功提示','订单区','支付区'],safeMode:['小手机兼容','标签强同步','触发词严格','允许交互JS','按钮回填输入框','字段统一映射','稳定pattern','角色可读'],dataShape:['购物车互动JSON'],fieldPack:['商品字段包','购物结算字段包','订单票据字段包'],actionPack:['购买按钮','购买结果回填','data-fill回填','QR回填按钮','生成小票按钮'],outputFormat:['自然回复+QR','QR文本+二阶段标签'],resultRole:['用户发送给角色'],secondStage:['生成小票页'],contentLength:['9项商品']});
+    msg='<b style="color:#2c9b66">已识别：购物 QR → 二阶段小票。</b><br>• QR 是“用户点击后的快捷回复协议”，不是二维码。<br>• 购物页负责展示和收集选择；QR 文本负责让角色知道结果；小票正则负责下一阶段渲染。';
+  }else if(preset==='shopping_tell'){
+    if($('purchaseFlow'))$('purchaseFlow').value='tell_text';
+    setQrSettings('dynamic_summary','hybrid_fill','kv_summary','role_reply','confirm_before_fill','wishlist','checkout','purchase_done','role_readable_soft');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='点击“告诉角色”后，生成【QR_心愿单购买】键值摘要：商品、金额、状态。用户发送后，角色必须认为购买已完成，并自然回应。';
+    setTags({runMode:['互动小应用模式'],uiContainer:['购物车页面','商品九宫格','底部结算栏'],uiStyle:['购物平台风','奶油柔和'],uiLayout:['九宫格布局','3×3宫格','商品卡片网格','详情弹窗','底部固定栏','总价栏','购买成功页'],uiImageRole:['不使用图片'],templateType:['心愿清单类','购物车互动类','商品选择类','结算反馈类'],interactionType:['商品详情弹窗','多选勾选','总价自动计算','确认购买','购买结果填入输入框'],dataShape:['购物车互动JSON'],fieldPack:['商品字段包','购物结算字段包'],actionPack:['购买按钮','购买结果回填'],contentLength:['9项商品']});
+    msg='<b style="color:#2c9b66">已识别：购物 QR → 告诉角色。</b><br>• 不导出小票正则。<br>• QR 文本就是角色可读的购买结果。';
+  }else if(preset==='shopping_success'){
+    if($('purchaseFlow'))$('purchaseFlow').value='success_only';
+    setQrSettings('none','none','short_protocol','no_ai','confirm_before_fill','wishlist','checkout','operation_result','role_readable_soft');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='点击购买后只在页面内显示支付成功弹窗和合计金额，不回填输入框，不生成第二阶段小票。';
+    setTags({runMode:['互动小应用模式'],uiContainer:['购物车页面','商品九宫格','底部结算栏'],uiStyle:['购物平台风','奶油柔和'],uiLayout:['九宫格布局','3×3宫格','商品卡片网格','详情弹窗','底部固定栏','总价栏','购买成功页'],uiImageRole:['不使用图片'],templateType:['心愿清单类','购物车互动类','商品选择类','结算反馈类'],interactionType:['商品详情弹窗','多选勾选','总价自动计算','确认购买'],dataShape:['购物车互动JSON'],fieldPack:['商品字段包','购物结算字段包'],actionPack:['购买按钮'],contentLength:['9项商品']});
+    msg='<b style="color:#2c9b66">已识别：只显示页面内结果。</b><br>• 不做 QR，不回填输入框。';
+  }else if(preset==='choice_result'){
+    if($('purchaseFlow'))$('purchaseFlow').value='tell_text';
+    setQrSettings('ai_options','data_fill','short_protocol','continue_plot','no_auto_send','script_play','single_choice','choice_result','dramatic_plot');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='AI 在 JSON 里生成 options，每个选项包含 label 与 fill。模板渲染为 button data-fill。fill 使用【QR_选择结果】短协议，用户发送后角色根据选择推进剧情。';
+    setTags({runMode:['半互动按钮模式'],uiContainer:['手机界面','弹窗面板'],uiStyle:['粉蓝手账','系统弹窗'],uiLayout:['按钮组','选择浮层'],uiImageRole:['不使用图片'],templateType:['商品选择类','问卷选择类'],interactionType:['点击填入输入框','单选按钮','提交选择','生成下一轮'],dataShape:['多按钮JSON'],fieldPack:['按钮字段包'],actionPack:['选择按钮','data-fill回填','提交选择按钮','QR回填按钮'],outputFormat:['自然回复+QR'],resultRole:['用户发送给角色'],secondStage:['生成剧情后续'],contentLength:['中等内容']});
+    msg='<b style="color:#2c9b66">已识别：选择 QR。</b><br>• 适合剧本选择、赴约/拒绝、下一步行动。<br>• 推荐 AI 生成 options[{label,fill}]，不要写死按钮。';
+  }else if(preset==='dynamic_summary'){
+    if($('purchaseFlow'))$('purchaseFlow').value='tell_text';
+    setQrSettings('dynamic_summary','js_postmessage','kv_summary','role_reply','fallback_visual','menu_order','checkout','order_summary','system_receipt');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='用户在卡片内多选/点菜/测试计分，最后点击提交。JS 动态汇总选择结果，生成【QR_结算结果】或【QR_测试结果】文本，并尝试填入输入框；同时在页面内显示结果作为兜底。';
+    setTags({runMode:['互动小应用模式'],uiContainer:['手机界面','购物车页面','报告页'],uiStyle:['购物平台风','像素游戏','系统弹窗'],uiLayout:['双栏信息','底部固定栏','总价栏','按钮组'],uiImageRole:['不使用图片'],templateType:['购物车互动类','问卷选择类','报告分析类'],interactionType:['多选勾选','总价自动计算','提交选择','购买结果填入输入框','复制结果'],dataShape:['选择结果JSON'],fieldPack:['商品字段包','按钮字段包','报告分析字段包'],actionPack:['提交选择按钮','购买结果回填','data-fill回填','动态汇总按钮','QR复制按钮'],outputFormat:['自然回复+QR','可复制文本框'],resultRole:['用户发送给角色'],secondStage:['生成报告页'],contentLength:['中等内容']});
+    msg='<b style="color:#2c9b66">已识别：动态结算 QR。</b><br>• 类似点菜平板/情感测试题：先内部交互，再汇总结果回填。<br>• 注意：如果目标环境不执行 JS，就必须提供页面内结果兜底。';
+  }else if(preset==='game_next'||preset==='form_result'){
+    if($('purchaseFlow'))$('purchaseFlow').value='tell_text';
+    setQrSettings('dynamic_summary','hybrid_fill','json_block',preset==='game_next'?'next_page':'update_status','fallback_visual',preset==='game_next'?'game':'quiz','submit_form',preset==='game_next'?'plot_branch':'quiz_score',preset==='game_next'?'dramatic_plot':'system_receipt');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='按钮点击后把结构化结果填入输入框；用户发送后，AI 根据结果生成下一阶段回复或页面。必须提供角色可读的 QR 前缀。';
+    setTags({runMode:['互动小应用模式'],uiContainer:['手机界面','弹窗面板'],uiStyle:['粉蓝手账','系统弹窗'],uiLayout:['按钮组','选择浮层'],uiImageRole:['不使用图片'],templateType:[preset==='game_next'?'小游戏类':'问卷选择类'],interactionType:['提交选择','点击填入输入框','生成下一轮'],dataShape:['选择结果JSON'],fieldPack:['按钮字段包'],actionPack:['提交选择按钮','data-fill回填'],contentLength:['中等内容']});
+    msg='<b style="color:#2c9b66">已识别：通用 QR 闭环。</b><br>• 卡片生成结果，用户发送，AI 进入下一阶段。';
+  }else if(preset==='agreement_sign'){
+    if($('purchaseFlow'))$('purchaseFlow').value='confirm_then_qr';
+    setQrSettings('fixed_reply','button_fill','signed_text','continue_plot','no_auto_send','agreement','sign_confirm','signed_agreement','contract_style');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='签署按钮生成【QR_协议签署】回填文本，说明签署人、协议名称、签署状态和补充条款。用户发送后，角色必须承认协议已签署并继续剧情。';
+    setTags({runMode:['半互动按钮模式'],uiContainer:['签署协议页','证件卡','弹窗面板'],uiStyle:['合同文书','复古纸张'],uiLayout:['签名区','印章区','按钮组'],uiImageRole:['不使用图片'],templateType:['合同协议类'],interactionType:['模拟签名','点击填入输入框','提交选择'],dataShape:['多按钮JSON'],fieldPack:['签署协议字段包','按钮字段包'],actionPack:['模拟签名按钮','data-fill回填'],contentLength:['中等内容']});
+    msg='<b style="color:#2c9b66">已识别：协议签署 QR。</b><br>• 适合签订协议互动版：签署/拒绝/补充条款。';
+  }else if(preset==='invitation_reply'){
+    if($('purchaseFlow'))$('purchaseFlow').value='tell_text';
+    setQrSettings('fixed_reply','button_fill','natural_text','role_reply','no_auto_send','invitation','accept_decline','invitation_reply','formal_notice');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='赴约/拒绝按钮生成【QR_邀约回复】文本，用户发送后角色根据赴约状态回应。';
+    setTags({runMode:['半互动按钮模式'],uiContainer:['公告通知页','单卡片'],uiStyle:['复古纸张','奶油柔和'],uiLayout:['按钮组','分区标题'],uiImageRole:['不使用图片'],templateType:['公告通知类'],interactionType:['点击填入输入框','单选按钮'],dataShape:['多按钮JSON'],fieldPack:['按钮字段包'],actionPack:['选择按钮','data-fill回填'],contentLength:['短内容']});
+    msg='<b style="color:#2c9b66">已识别：请柬邀约 QR。</b><br>• 适合欣然赴约/婉拒/改期等固定按钮。';
+  }else if(preset==='payment_voucher'){
+    if($('purchaseFlow'))$('purchaseFlow').value='voucher_only';
+    setQrSettings('receipt_protocol','hybrid_fill','receipt_text','render_receipt','confirm_before_fill','payment','pay_confirm','payment_success','receipt_style');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='支付按钮生成【QR_支付成功】凭证文本，包含金额、商品、收款方、支付状态；用户发送后角色可回应或生成凭证卡。';
+    setTags({runMode:['互动小应用模式'],uiContainer:['订单详情页','票据页'],uiStyle:['银行账单风','极简白卡'],uiLayout:['订单区','支付区','明细列表','按钮组'],uiImageRole:['不使用图片'],templateType:['票据账单类','订单消费类'],interactionType:['模拟付款','购买结果填入输入框'],dataShape:['订单票据JSON'],fieldPack:['订单票据字段包'],actionPack:['模拟付款按钮','data-fill回填'],contentLength:['中等内容']});
+    msg='<b style="color:#2c9b66">已识别：支付凭证 QR。</b><br>• 适合微信支付凭证、订单消费、小票账单。';
+  }else if(preset==='search_request'){
+    if($('purchaseFlow'))$('purchaseFlow').value='tell_text';
+    setQrSettings('command_protocol','button_fill','search_query_text','generate_report','no_auto_send','search','search_submit','search_request','command_style');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='搜索/导航按钮生成【QR_搜索请求】或【QR_导航请求】，包含关键词、地点、筛选条件；用户发送后角色生成搜索结果或地图页面。';
+    setTags({runMode:['半互动按钮模式'],uiContainer:['搜索结果页','地图窗口'],uiStyle:['搜索引擎','地图导航'],uiLayout:['搜索结果区','地图+信息卡','按钮组'],uiImageRole:['不使用图片'],templateType:['搜索查询类','地图导航类'],interactionType:['跳转搜索','打开地图','点击填入输入框'],dataShape:['搜索结果JSON'],fieldPack:['搜索结果字段包','地图地点字段包'],actionPack:['刷新按钮','data-fill回填'],contentLength:['5条记录']});
+    msg='<b style="color:#2c9b66">已识别：搜索/地图 QR。</b><br>• 适合谷歌搜索、谷歌地图类工具拟真。';
+  }else if(preset==='social_action'){
+    if($('purchaseFlow'))$('purchaseFlow').value='tell_text';
+    setQrSettings('fixed_reply','button_fill','natural_text','continue_plot','no_auto_send','social','like_comment','social_reply','wechat_style');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='点赞/评论/回复按钮生成【QR_社交互动】文本，用户发送后角色根据社交动作继续回应。';
+    setTags({runMode:['半互动按钮模式'],uiContainer:['聊天记录页','手机界面'],uiStyle:['社交软件风'],uiLayout:['聊天气泡流','按钮组'],uiImageRole:['文字头像'],templateType:['聊天记录类'],interactionType:['点击填入输入框','提交选择'],dataShape:['聊天记录JSON'],fieldPack:['聊天记录字段包','按钮字段包'],actionPack:['选择按钮','data-fill回填'],contentLength:['短内容']});
+    msg='<b style="color:#2c9b66">已识别：社交互动 QR。</b>';
+  }else if(preset==='reader_choice'){
+    if($('purchaseFlow'))$('purchaseFlow').value='tell_text';
+    setQrSettings('ai_options','data_fill','choice_text','next_page','no_auto_send','reader','single_choice','plot_branch','dramatic_plot');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='章节选择/书籍选择按钮生成【QR_剧本选择】或【QR_互动结果】，用户发送后角色生成下一页/下一章。';
+    setTags({runMode:['半互动按钮模式'],uiContainer:['翻页书','档案夹'],uiStyle:['复古纸张','魔法书页'],uiLayout:['翻页书页','按钮组','分页页脚'],uiImageRole:['不使用图片'],templateType:['长文阅读类'],interactionType:['分页翻页','点击填入输入框','生成下一轮'],dataShape:['长文JSON'],fieldPack:['长文分页字段包','按钮字段包'],actionPack:['下一步按钮','data-fill回填'],contentLength:['多页内容']});
+    msg='<b style="color:#2c9b66">已识别：阅读/剧本选择 QR。</b>';
+  }else if(preset==='status_report'){
+    if($('purchaseFlow'))$('purchaseFlow').value='tell_text';
+    setQrSettings('dynamic_summary','js_postmessage','score_text','update_status','fallback_visual','status_detector','open_result','status_update','system_receipt');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='检测/测试完成后生成【QR_状态更新】或【QR_测试结算】，包含分数、主导情绪、结论；用户发送后角色更新状态或生成报告。';
+    setTags({runMode:['互动小应用模式'],uiContainer:['状态面板','报告页'],uiStyle:['赛博终端','系统弹窗'],uiLayout:['评分仪表盘','进度条','按钮组'],uiImageRole:['不使用图片'],templateType:['状态监控类','报告分析类','问卷选择类'],interactionType:['显示答案','提交选择','复制结果'],dataShape:['报告JSON'],fieldPack:['报告分析字段包','状态数值字段包'],actionPack:['提交选择按钮','data-fill回填'],contentLength:['简短报告']});
+    msg='<b style="color:#2c9b66">已识别：状态检测 QR。</b>';
+  }else if(preset==='schedule_task'){
+    if($('purchaseFlow'))$('purchaseFlow').value='create_task_after';
+    setQrSettings('task_protocol','hybrid_fill','task_text','create_task','manual_send_hint','task','set_reminder','schedule_created','formal_notice');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='按钮生成【QR_任务创建】文本，包含任务名、时间、提醒方式、备注；用户发送后角色确认并可生成任务/日程卡。';
+    msg='<b style="color:#2c9b66">已识别：日程任务 QR。</b>';
+  }else if(preset==='memory_save'){
+    if($('purchaseFlow'))$('purchaseFlow').value='save_to_memory';
+    setQrSettings('memory_protocol','hybrid_fill','memory_text','save_memory_hint','manual_send_hint','memory','save_memory','memory_note','diary_note');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='按钮生成【QR_记忆沉淀】文本，包含要记住的事实、来源、重要度；用户发送后角色需要明确记住/写入长期设定。';
+    msg='<b style="color:#2c9b66">已识别：记忆沉淀 QR。</b>';
+  }else if(preset==='learning_checkin'){
+    if($('purchaseFlow'))$('purchaseFlow').value='update_status_after';
+    setQrSettings('state_update','hybrid_fill','checkin_text','generate_report','fallback_visual','learning','checkin','study_done','teacher_style');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='按钮生成【QR_学习打卡】文本，包含学习内容、完成度、错题/反馈；用户发送后角色用老师口吻总结并鼓励。';
+    msg='<b style="color:#2c9b66">已识别：学习打卡 QR。</b>';
+  }else if(preset==='health_checkin'){
+    if($('purchaseFlow'))$('purchaseFlow').value='update_status_after';
+    setQrSettings('state_update','hybrid_fill','health_text','update_status','fallback_visual','health','checkin','health_data','medical_note');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='按钮生成【QR_健康打卡】文本，包含运动、喝水、睡眠、体重或状态；用户发送后角色生成健康/关怀反馈。';
+    msg='<b style="color:#2c9b66">已识别：健康运动 QR。</b>';
+  }else if(preset==='pet_interaction'){
+    if($('purchaseFlow'))$('purchaseFlow').value='tell_text';
+    setQrSettings('fixed_reply','button_fill','natural_text','role_reply','no_auto_send','pet','button_click','pet_status','cute_chat');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='按钮生成【QR_宠物互动】文本，包含喂食、陪玩、清洁、状态变化；用户发送后角色/宠物回应。';
+    msg='<b style="color:#2c9b66">已识别：宠物互动 QR。</b>';
+  }else if(preset==='inventory_bag'){
+    if($('purchaseFlow'))$('purchaseFlow').value='update_status_after';
+    setQrSettings('state_update','hybrid_fill','inventory_text','update_status','fallback_visual','inventory','use_item','inventory_change','game_style');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='按钮生成【QR_背包变化】文本，包含获得/使用/消耗的物品、数量和效果；用户发送后角色更新背包或推进剧情。';
+    msg='<b style="color:#2c9b66">已识别：背包物品 QR。</b>';
+  }else if(preset==='vote_poll'){
+    if($('purchaseFlow'))$('purchaseFlow').value='tell_text';
+    setQrSettings('poll_protocol','hybrid_fill','poll_text','summarize_result','fallback_visual','vote','vote_submit','poll_result','system_receipt');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='按钮生成【QR_投票结果】文本，包含选项、票数或用户选择；用户发送后角色总结投票结果。';
+    msg='<b style="color:#2c9b66">已识别：投票统计 QR。</b>';
+  }else if(preset==='feedback_collect'){
+    if($('purchaseFlow'))$('purchaseFlow').value='tell_text';
+    setQrSettings('dynamic_summary','hybrid_fill','feedback_text','summarize_result','fallback_visual','feedback','feedback_submit','feedback_result','customer_service');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='按钮生成【QR_反馈提交】文本，包含满意度、问题、建议；用户发送后角色回应并整理反馈。';
+    msg='<b style="color:#2c9b66">已识别：反馈意见 QR。</b>';
+  }else if(preset==='resource_claim'){
+    if($('purchaseFlow'))$('purchaseFlow').value='tell_text';
+    setQrSettings('receipt_protocol','button_fill','search_query_text','role_reply','manual_send_hint','resource','download_claim','resource_link','system_receipt');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='按钮生成【QR_资源领取】文本，包含资源名、链接/编号、领取状态；用户发送后角色确认资源领取。';
+    msg='<b style="color:#2c9b66">已识别：资源领取 QR。</b>';
+  }else if(preset==='achievement_reward'){
+    if($('purchaseFlow'))$('purchaseFlow').value='reward_after';
+    setQrSettings('reward_protocol','button_fill','reward_text','give_reward','manual_send_hint','reward','claim_reward','reward_claimed','game_style');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='按钮生成【QR_奖励领取】文本，包含奖励、积分、徽章或兑换内容；用户发送后角色发放奖励并回应。';
+    msg='<b style="color:#2c9b66">已识别：成就奖励 QR。</b>';
+  }else if(preset==='relationship_update'){
+    if($('purchaseFlow'))$('purchaseFlow').value='update_status_after';
+    setQrSettings('state_update','hybrid_fill','relationship_text','update_relationship','fallback_visual','relationship','button_click','relationship_change','romantic_note');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='按钮生成【QR_关系变化】文本，包含好感、亲密度、羁绊事件；用户发送后角色根据关系变化回应。';
+    msg='<b style="color:#2c9b66">已识别：关系好感 QR。</b>';
+  }else if(preset==='reminder_alarm'){
+    if($('purchaseFlow'))$('purchaseFlow').value='create_task_after';
+    setQrSettings('task_protocol','hybrid_fill','task_text','create_task','manual_send_hint','reminder','set_reminder','reminder_set','formal_notice');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='按钮生成【QR_提醒设置】文本，包含提醒时间、内容和频率；用户发送后角色确认提醒。';
+    msg='<b style="color:#2c9b66">已识别：提醒闹钟 QR。</b>';
+  }else if(preset==='coupon_claim'){
+    if($('purchaseFlow'))$('purchaseFlow').value='reward_after';
+    setQrSettings('reward_protocol','button_fill','coupon_text','give_reward','manual_send_hint','reward','claim_reward','reward_claimed','receipt_style');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='按钮生成【QR_优惠兑换】文本，包含优惠券名、折扣、有效期和兑换状态；用户发送后角色确认兑换。';
+    msg='<b style="color:#2c9b66">已识别：优惠券兑换 QR。</b>';
+  }else if(preset==='customer_followup'){
+    if($('purchaseFlow'))$('purchaseFlow').value='save_to_memory';
+    setQrSettings('memory_protocol','hybrid_fill','customer_note_text','add_note','fallback_visual','customer','submit_form','customer_followup','business_record');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='按钮生成【QR_客户跟进】文本，包含客户、阶段、跟进内容、下一步任务；用户发送后角色整理成CRM跟进记录。';
+    msg='<b style="color:#2c9b66">已识别：客户跟进 QR。</b>';
+  }else if(preset==='inner_switch'){
+    if($('purchaseFlow'))$('purchaseFlow').value='success_only';
+    setQrSettings('visual_only','internal_tabs','natural_text','no_ai','fallback_visual','reader','button_click','operation_result','role_readable_soft');
+    if($('secondaryInstruction'))$('secondaryInstruction').value='只在卡片内部切换页面、展开详情或显示弹窗。不要求把结果传给角色，不使用 data-fill。';
+    setTags({runMode:['互动小应用模式'],uiContainer:['多页应用','手机界面','弹窗面板'],uiStyle:['粉蓝手账','系统弹窗'],uiLayout:['分页切换','按钮组','详情弹窗'],uiImageRole:['不使用图片'],templateType:['展示信息类','长文阅读类'],interactionType:['详情展开','切换标签页','分页翻页','返回上一页'],dataShape:['单对象JSON'],fieldPack:['通用卡片字段'],actionPack:['详情按钮','返回按钮'],contentLength:['多页内容']});
+    msg='<b style="color:#2c9b66">已识别：仅卡片内切换。</b><br>• 这类不是 QR 回填，只是视觉互动。';
+  }else{
+    setQrSettings('none','none','short_protocol','role_reply','confirm_before_fill','general','button_click','operation_result','role_readable_soft');
+    msg='<b>未识别明确 QR 闭环。</b><br>• 可在需求框写：data-fill、回填、选择结果、购买后告诉角色、二阶段小票、动态结算、卡片内切换。';
+  }
+  setInteractionStatus(msg);
+  syncInteractiveSettingTags();
+  refreshByTags(false);
+  if(show)toast('已应用 QR 互动设置');
+}
+
+function clearTags(){Object.keys(TAGS).forEach(id=>{state[id]=[];let b=$(id);if(b)[...b.children].forEach(c=>c.classList.remove('on'))})}
+function setTags(map){clearTags();Object.entries(map).forEach(([id,vals])=>{if(!TAGS[id])return;(Array.isArray(vals)?vals:[vals]).forEach(v=>{let b=$(id);let el=[...b.children].find(c=>c.textContent===v);if(el)el.click()})});refreshByTags(false)}
+function localSmartMatch(show=false){if(isViewOnlyNeed()){applyViewOnlyPreset(show);return}let t=basicInfoText().toLowerCase();let m={runMode:['静态展示模式'],uiContainer:['单卡片'],uiStyle:['粉蓝手账'],uiLayout:['顶部标题栏'],uiTexture:['圆角卡片'],uiImageRole:['不使用图片'],templateType:['展示信息类'],triggerScene:['用户询问'],interactionType:['无交互'],outputBlocks:['自然回复','标题区','明细列表'],safeMode:['小手机兼容','标签强同步','触发词严格','禁止条件语法','核心内容静态直显'],dataShape:['单对象JSON'],fieldPack:['通用卡片字段'],actionPack:['无按钮'],contentLength:['中等内容']};
+ if(/九宫格|9宫格|宫格|购物|购买|结算|勾选|多选|商品|心愿单|淘宝|购物车/.test(t)){m.runMode=['互动小应用模式'];m.uiContainer=['手机界面','购物车页面','商品九宫格','商品详情页','底部结算栏'];m.uiStyle=['购物平台风','奶油柔和'];m.uiLayout=['九宫格布局','3×3宫格','商品卡片网格','详情弹窗','底部固定栏','总价栏','购买成功页'];m.templateType=['心愿清单类','购物车互动类','商品选择类','结算反馈类'];m.interactionType=['商品详情弹窗','多选勾选','总价自动计算','确认购买','购买结果填入输入框'];m.outputBlocks=['自然回复','标题区','九宫格商品区','商品详情区','价格区','勾选状态','底部结算区','购买成功提示'];m.dataShape=['购物车互动JSON'];m.fieldPack=['商品字段包','购物结算字段包'];m.actionPack=['购买按钮','购买结果回填','data-fill回填'];m.contentLength=[/12/.test(t)?'12项商品':'9项商品'];m.safeMode=['小手机兼容','标签强同步','触发词严格','禁止条件语法','允许交互JS','允许JS只做交互','核心内容静态直显','不使用图片严格生效','字段统一映射'];}
+ if(/报告|分析|资产|状态|好感|进度/.test(t)){m.templateType=['报告分析类','状态监控类'];m.dataShape=['报告JSON'];m.fieldPack=['报告分析字段包','状态数值字段包'];}
+ if(/证件|身份证|结婚证|会员卡/.test(t)){m.uiContainer=['证件卡','会员卡'];m.uiStyle=['官方证件','极简白卡'];m.templateType=['展示信息类'];}
+ setTags(m);if(show)toast('已根据需求匹配标签')}
+async function autoMatchTags(){
+  let cfg=apiConfig();
+  let missing=[];
+  if(!cfg.base) missing.push('API Base URL');
+  if(!cfg.key) missing.push('API Key');
+  if(!cfg.model) missing.push('Model');
+  if(missing.length){toast('无法调用 AI：缺少 '+missing.join(' / ')+'。需要本地匹配请点右侧按钮。');return}
+  toast('正在调用 AI 匹配标签...');
+  let btns=[...document.querySelectorAll('button')];
+  btns.forEach(b=>{if((b.textContent||'').includes('AI 根据②需求')){b.disabled=true;b.textContent='🤖 AI 匹配中...'}});
+  let prompt=`你是糯叽机正则生成器的标签匹配专家。请只根据“用户真实需求”和“补充要求”选择标签，不要被规则名误导。
+
+【最高优先级判断】
+- 用户写“查看/查手机/看手机/手机页面/手机界面/微信/浏览器/聊天记录/浏览记录/只读/仅查看”，但没有写购买、结算、回填、发送给角色、QR、提交、签署、投票、打卡等动作时，必须选择查看展示模式/纯查看面板类/无QR互动；禁止选择购物车互动类、购买按钮、QR回填、二阶段小票。
+- 用户写“九宫格/9宫格/宫格/购物车/商品/购买/勾选/多选/结算/价格/让角色知道买了什么”时，必须选择：runMode=互动小应用模式，uiLayout 包含九宫格布局/3×3宫格/商品卡片网格/底部固定栏，templateType 包含购物车互动类/商品选择类/结算反馈类，interactionType 包含商品详情弹窗/多选勾选/总价自动计算/确认购买/购买结果填入输入框。禁止选择列表排版作为主布局。
+- 用户写“报告/资产/状态/分析/评分/进度”时，优先报告分析类/状态监控类，但如果同时写购物购买，则购物互动优先。
+- 用户写“证件/身份证/结婚证/会员卡”时，优先证件档案类。
+- 用户写“搜索/地图/订单/票据/抽卡/解谜/游戏/长文”时，选择对应类型。
+
+【输出结构标签选择规则】
+- dataShape 负责“数据整体长什么样”，例如购物车互动JSON、QR短协议文本、二阶段小票JSON。
+- fieldPack 负责“需要哪些字段”，例如商品字段包、小票凭证字段包、任务日程字段包。
+- actionPack 负责“用户可点什么按钮”，例如QR回填按钮、生成小票按钮、保存记忆按钮。
+- outputFormat 负责“最终呈现形式”，例如自然回复+QR、小票凭证格式、蓝框显示结果。
+- resultRole 负责“这段输出属于谁”，例如用户发送给角色、双方都可渲染、作为记忆线索。
+- secondStage 负责“用户发送后下一步生成什么”，例如生成小票页、生成状态卡、生成剧情后续。
+
+【UI 标签选择规则】
+- uiContainer 负责“像什么界面/装在什么壳里”，例如微信列表、支付凭证、剧本选择页、客户跟进页。
+- uiStyle 负责“视觉气质”，例如合同文书、微信拟真、赛博终端、奶油柔和。
+- uiLayout 负责“信息怎么排”，例如九宫格、时间轴、票据明细、底部确认栏。
+- uiTexture 负责“细节质感”，例如票根孔洞、已支付章、checkbox原生勾选、可复制文本框。
+- uiImageRole 负责“图片承担什么角色”，没有图片需求时必须选不使用图片。
+
+【互斥规则】
+runMode 只能选一个；dataShape 只能选一个；contentLength 只能选一个。
+九宫格不能与列表排版同时作为主布局；无交互不能与购买/勾选/弹窗/回填同时出现；不使用图片时不要选角色头像/商品主图/封面图。
+
+用户需求：
+${basicInfoText()}
+
+可选标签：
+${JSON.stringify(TAGS,null,2)}
+
+只返回 JSON 对象，key 是标签组 id，value 是字符串数组。所有标签必须逐字来自可选标签。不要解释，不要 Markdown。`;
+  try{
+    let r=await fetch(cfg.base+'/chat/completions',{method:'POST',headers:{Authorization:'Bearer '+cfg.key,'Content-Type':'application/json'},body:JSON.stringify({model:cfg.model,messages:[{role:'system',content:'你只能输出合法 JSON 对象，不能输出解释文字。'},{role:'user',content:prompt}],temperature:.05})});
+    let j=await r.json();
+    if(!r.ok)throw new Error(j?.error?.message||r.statusText);
+    let raw=j.choices?.[0]?.message?.content||'{}';
+    let map=parseJsonLoose(raw);
+    map=resolveTagConflicts(map);
+    if(!map||!Object.keys(map).length) throw new Error('AI 没有返回有效标签 JSON');
+    setTags(map);
+    toast('AI 已完成标签匹配');
+  }catch(e){
+    toast('AI 匹配失败：'+e.message+'。没有自动改用本地匹配。');
+  }finally{
+    btns.forEach(b=>{if((b.textContent||'').includes('AI 匹配中')){b.disabled=false;b.textContent='🤖 AI 根据②需求智能匹配全部标签'}});
+  }
+}
+function resolveTagConflicts(map){
+  map=map||{};
+  if(isViewOnlyNeed()){
+    map.runMode=['查看展示模式'];
+    map.templateType=['手机查看类','应用入口类','浏览记录类','纯查看面板类'].filter(x=>TAGS.templateType.includes(x));
+    map.interactionType=['页面切换','打开应用','查看聊天','查看浏览记录','只读查看','无QR互动'].filter(x=>TAGS.interactionType.includes(x));
+    map.actionPack=['查看按钮','打开应用按钮','返回主页按钮','只读切换按钮'].filter(x=>TAGS.actionPack.includes(x));
+    map.dataShape=['手机桌面JSON'].filter(x=>TAGS.dataShape.includes(x));
+    map.outputFormat=['自然回复+只读卡片'].filter(x=>TAGS.outputFormat&&TAGS.outputFormat.includes(x));
+    map.resultRole=['角色生成给用户'].filter(x=>TAGS.resultRole&&TAGS.resultRole.includes(x));
+    map.secondStage=['无二阶段'].filter(x=>TAGS.secondStage&&TAGS.secondStage.includes(x));
+    ['购物车互动类','商品选择类','结算反馈类','票据账单类'].forEach(x=>{map.templateType=(map.templateType||[]).filter(v=>v!==x)});
+    ['购买按钮','结算按钮','购买结果回填','data-fill回填','QR回填按钮','生成小票按钮'].forEach(x=>{map.actionPack=(map.actionPack||[]).filter(v=>v!==x)});
+    return map;
+  }
+
+  let need=(basicInfoText()+' '+JSON.stringify(map)).toLowerCase();
+  let wantsShop=/九宫格|9宫格|宫格|购物|购买|结算|勾选|多选|商品|心愿单|淘宝|购物车|礼物|价格/.test(need);
+  if(wantsShop){
+    map.runMode=['互动小应用模式'];
+    map.uiContainer=Array.from(new Set([...(map.uiContainer||[]),'手机界面','购物车页面','商品九宫格','商品详情页','底部结算栏']));
+    map.uiLayout=(map.uiLayout||[]).filter(x=>!['列表排版','纵向列表','时间轴'].includes(x));
+    ['九宫格布局','3×3宫格','商品卡片网格','详情弹窗','底部固定栏','总价栏','购买成功页'].forEach(x=>{map.uiLayout=map.uiLayout||[];if(!map.uiLayout.includes(x))map.uiLayout.push(x)});
+    map.templateType=Array.from(new Set([...(map.templateType||[]),'心愿清单类','购物车互动类','商品选择类','结算反馈类']));
+    map.interactionType=(map.interactionType||[]).filter(x=>x!=='无交互');
+    ['商品详情弹窗','多选勾选','取消选择','总价自动计算','确认购买','购买结果填入输入框'].forEach(x=>{map.interactionType=map.interactionType||[];if(!map.interactionType.includes(x))map.interactionType.push(x)});
+    map.outputBlocks=Array.from(new Set([...(map.outputBlocks||[]),'九宫格商品区','商品详情区','价格区','勾选状态','底部结算区','购买成功提示','操作按钮']));
+    map.dataShape=['购物车互动JSON'];
+    map.fieldPack=Array.from(new Set([...(map.fieldPack||[]),'商品字段包','心愿单字段包','购物结算字段包']));
+    map.actionPack=Array.from(new Set([...(map.actionPack||[]),'购买按钮','结算按钮','购买结果回填','data-fill回填']));
+    map.contentLength=[/12|十二/.test(need)?'12项商品':'9项商品'];
+  }
+  if(/不使用图片|不要图片|无图片/.test(need)){
+    map.uiImageRole=['不使用图片'];
+    map.safeMode=Array.from(new Set([...(map.safeMode||[]),'不使用图片严格生效']));
+  }
+  if(/报告|资产|状态|分析|评分|进度/.test(need)&&!wantsShop){
+    map.templateType=Array.from(new Set([...(map.templateType||[]),'报告分析类','状态监控类']));
+    map.dataShape=['报告JSON'];
+  }
+  Object.keys(map).forEach(k=>{
+    if(!TAGS[k]){delete map[k];return}
+    map[k]=(Array.isArray(map[k])?map[k]:[map[k]]).filter(v=>TAGS[k].includes(v));
+    if(SINGLE[k]&&map[k]?.length>1)map[k]=[map[k][0]];
+  });
+  return map;
+}
+function qrMode(){return ($('qrMode')?.value||'none')}
+function qrCarrier(){return ($('qrCarrier')?.value||'none')}
+function qrPayload(){return ($('qrPayload')?.value||'short_protocol')}
+function qrAfterAction(){return ($('qrAfterAction')?.value||'role_reply')}
+function qrSafety(){return ($('qrSafety')?.value||'confirm_before_fill')}
+function qrScene(){return ($('qrScene')?.value||'general')}
+function qrTriggerAction(){return ($('qrTriggerAction')?.value||'button_click')}
+function qrResultType(){return ($('qrResultType')?.value||'operation_result')}
+function qrTone(){return ($('qrTone')?.value||'role_readable_soft')}
+function wantsQrFlow(){if(isViewOnlyNeed())return false;let t=needText();return qrMode()!=='none'||/qr|quick reply|quick response|data-fill|回填|发送给角色|告诉角色|选择结果|购买结果|下一步|提交结果/.test(t)}
+function qrProtocolName(){
+  let scene=qrScene(), result=qrResultType(), preset=$('interactionPreset')?.value||'';
+  if(scene==='wishlist'||preset.includes('shopping')||result==='purchase_done')return '【QR_心愿单购买】';
+  if(scene==='menu_order'||result==='order_summary')return '【QR_点菜订单】';
+  if(scene==='payment'||result==='payment_success')return '【QR_支付成功】';
+  if(scene==='invitation'||result==='invitation_reply')return '【QR_邀约回复】';
+  if(scene==='agreement'||result==='signed_agreement')return '【QR_协议签署】';
+  if(scene==='quiz'||result==='quiz_score')return '【QR_测试结算】';
+  if(scene==='script_play'||result==='plot_branch')return '【QR_剧本选择】';
+  if(scene==='game')return '【QR_游戏下一步】';
+  if(scene==='search'||result==='search_request')return '【QR_搜索请求】';
+  if(result==='navigation_request')return '【QR_导航请求】';
+  if(scene==='social'||result==='social_reply')return '【QR_社交互动】';
+  if(scene==='status_detector'||result==='status_update')return '【QR_状态更新】';
+  if(scene==='task'||result==='task_created'||result==='schedule_created')return '【QR_任务创建】';
+  if(scene==='reminder'||result==='reminder_set')return '【QR_提醒设置】';
+  if(scene==='memory'||result==='memory_note')return '【QR_记忆沉淀】';
+  if(scene==='learning'||result==='study_done')return '【QR_学习打卡】';
+  if(scene==='health'||result==='health_data')return '【QR_健康打卡】';
+  if(scene==='pet'||result==='pet_status')return '【QR_宠物互动】';
+  if(scene==='inventory'||result==='inventory_change')return '【QR_背包变化】';
+  if(scene==='vote'||result==='poll_result')return '【QR_投票结果】';
+  if(scene==='feedback'||result==='feedback_result')return '【QR_反馈提交】';
+  if(scene==='resource'||result==='resource_link')return '【QR_资源领取】';
+  if(scene==='reward'||result==='reward_claimed')return '【QR_奖励领取】';
+  if(scene==='relationship'||result==='relationship_change')return '【QR_关系变化】';
+  if(scene==='customer'||result==='customer_followup')return '【QR_客户跟进】';
+  if(result==='supplier_record')return '【QR_供应商记录】';
+  if(result==='budget_record')return '【QR_预算记录】';
+  return '【QR_互动结果】';
+}
+function outputStructureBlock(){
+  let f=getSel('outputFormat'), rr=getSel('resultRole'), ss=getSel('secondStage');
+  if(!f.length&&!rr.length&&!ss.length)return '';
+  return `\n【输出结构要求】\n- 输出格式：${f.length?f.join('、'):'未指定'}。\n- 结果归属：${rr.length?rr.join('、'):'未指定'}。\n- 二阶段输出：${ss.length?ss.join('、'):'未指定'}。\n- 第一阶段负责展示/收集操作结果；第二阶段只在用户发送 QR 或结果文本后触发，禁止混淆。`;
+}
+function qrInstructionBlock(){
+  if(!wantsQrFlow())return '';
+  let qm=(INTERACTIVE_TAG_OPTIONS.qrMode.find(x=>x.value===qrMode())||{}).label||qrMode();
+  let qc=(INTERACTIVE_TAG_OPTIONS.qrCarrier.find(x=>x.value===qrCarrier())||{}).label||qrCarrier();
+  let qp=(INTERACTIVE_TAG_OPTIONS.qrPayload.find(x=>x.value===qrPayload())||{}).label||qrPayload();
+  let qa=(INTERACTIVE_TAG_OPTIONS.qrAfterAction.find(x=>x.value===qrAfterAction())||{}).label||qrAfterAction();
+  let qs=(INTERACTIVE_TAG_OPTIONS.qrSafety.find(x=>x.value===qrSafety())||{}).label||qrSafety();
+  let qscene=(INTERACTIVE_TAG_OPTIONS.qrScene.find(x=>x.value===qrScene())||{}).label||qrScene();
+  let qtrig=(INTERACTIVE_TAG_OPTIONS.qrTriggerAction.find(x=>x.value===qrTriggerAction())||{}).label||qrTriggerAction();
+  let qres=(INTERACTIVE_TAG_OPTIONS.qrResultType.find(x=>x.value===qrResultType())||{}).label||qrResultType();
+  let qtone=(INTERACTIVE_TAG_OPTIONS.qrTone.find(x=>x.value===qrTone())||{}).label||qrTone();
+  return `\n【QR快捷回复协议】\n- QR 含义：Quick Reply / Quick Response，不是二维码。它用于把用户在卡片里的点击、选择、购买、签署、搜索、测试或点菜结果转成角色可读的快捷回复。\n- QR 场景：${qscene}；触发动作：${qtrig}；结果类型：${qres}；语气包装：${qtone}。\n- QR 前缀：${qrProtocolName()}。回填给用户的文本必须包含此前缀，方便角色识别。\n- QR 层级：${qm}；承载方式：${qc}；内容形态：${qp}；发送后动作：${qa}；安全策略：${qs}。\n- 重要限制：按钮不要静默自动替用户发送消息。只能填入输入框、复制/显示兜底，必须由用户自己发送后，角色才算“知道”。\n- 角色识别规则：当下一轮收到 ${qrProtocolName()} 时，必须把它当成用户已经完成的操作结果，而不是重新询问用户。`; 
+}
+function currentIsShopping(){if(isViewOnlyNeed())return false;let need=(($('userNeed')?.value||'')+' '+($('extraNeed')?.value||'')).toLowerCase();let hasShop=/九宫格|9宫格|宫格|购物|购买|结算|勾选|多选|商品|心愿单|淘宝|购物车|礼物|价格|小票|已购买/.test(need);return (has('runMode','互动小应用模式')&&hasShop)||has('templateType','购物车互动类')||has('uiLayout','九宫格布局')||hasShop}
+function purchaseFlowMode(){let el=$('purchaseFlow');let need=(($('userNeed')?.value||'')+' '+($('extraNeed')?.value||'')).toLowerCase();if(el&&el.value)return el.value;if(/小票|receipt|二阶段|再次调用|订单|票据/.test(need))return 'receipt_stage';if(/回填|输入框|让角色知道|发送给角色|告诉角色/.test(need))return 'tell_text';return 'success_only'}
+function receiptTag(){let v=($('receiptTag')?.value||'receipt-card').trim().replace(/[<>\s]/g,'');return v||'receipt-card'}
+function wantsReceiptFlow(){let mode=purchaseFlowMode();let need=(($('userNeed')?.value||'')+' '+($('extraNeed')?.value||'')).toLowerCase();return mode==='receipt_stage'||mode==='reaction_receipt'||/小票|receipt|二阶段|再次调用|生成小票|票据/.test(need)}
+function wantsInputFill(){if(isViewOnlyNeed())return false;let mode=purchaseFlowMode();let need=(($('userNeed')?.value||'')+' '+($('extraNeed')?.value||'')+' '+JSON.stringify(selectedTagsSummary())).toLowerCase();return wantsReceiptFlow()||mode==='tell_text'||mode==='reaction_receipt'||/回填|填入输入框|输入框|让角色知道|data-fill|chat-input-fill|发送给角色|告诉角色|购买结果回填|按钮回填/.test(need)}
+function refreshByTags(show=true){syncPattern();let isShop=currentIsShopping();$('fieldSpec').value=isShop?shoppingFieldSpec():genericFieldSpec();$('sampleOutput').value=isShop?shoppingSample():genericSample();$('aiPrompt').value=isShop?shoppingAiPrompt():genericAiPrompt();$('htmlTemplate').value=isShop?shoppingHtmlTemplate():genericHtmlTemplate();if(show)toast('已根据标签生成结构');renderCurrentPreview(false)}
+function tag(){return ($('tagName').value||'custom-card').trim().replace(/[<>\s]/g,'')||'custom-card'}
+function trigger(){return $('triggerKeywords').value.trim()}
+function genericFieldSpec(){return 'title,name,avatarText,subtitle,totalText,status,updateTime,items[{category,symbol,title,type,value,text,note}]'}
+function shoppingFieldSpec(){return 'title,name,avatarText,intro,currency,buyPromptPrefix,items[{id,symbol,name,price,priceText,tag,comment,detail}]'}
+function receiptFieldSpec(){return 'title,receiver,status,orderNo,time,total,roleReply,note,items[{name,priceText,tag,comment}]'}
+function genericSample(){let tg=tag();return `我整理好了，给你看一下。\n<${tg}>{"title":"信息卡片","name":"清皊","avatarText":"清","subtitle":"状态展示","totalText":"总计：¥188.00","status":"可查看","updateTime":"更新于：2026-05-29","items":[{"category":"分类","symbol":"✨","title":"项目一","type":"说明","value":"¥88.00","text":"正文内容","note":"备注内容"}]}</${tg}>`}
+function shoppingSample(){let tg=tag();return `我把想要的小东西放进这个心愿购物车里了，你可以点开看看。\n<${tg}>{"title":"心愿购物车","name":"糯米","avatarText":"糯","intro":"这些都是我最近偷偷惦记的小东西。","currency":"¥","buyPromptPrefix":"我选择给你买了：","items":[{"id":"p01","symbol":"🌌","name":"星空投影仪","price":199,"priceText":"¥199.00","tag":"氛围小物","comment":"晚上打开会像睡在银河里。","detail":"小型星空投影灯，适合卧室和聊天背景。"},{"id":"p02","symbol":"🐾","name":"猫爪棉花糖","price":39.9,"priceText":"¥39.90","tag":"甜食","comment":"软乎乎的，看着就心情好。","detail":"猫爪形状棉花糖，适合当小零食。"},{"id":"p03","symbol":"🎧","name":"奶油色耳机","price":259,"priceText":"¥259.00","tag":"日常用品","comment":"想戴着它听你发来的语音。","detail":"柔和配色无线耳机。"},{"id":"p04","symbol":"📔","name":"月光手账本","price":68,"priceText":"¥68.00","tag":"文具","comment":"可以把每天的小心情写进去。","detail":"硬壳手账本，内页有浅色插画。"},{"id":"p05","symbol":"🕯️","name":"白茶香薰","price":88,"priceText":"¥88.00","tag":"房间氛围","comment":"想让房间闻起来干净又温柔。","detail":"白茶香调香薰蜡烛。"},{"id":"p06","symbol":"🧸","name":"小熊抱枕","price":129,"priceText":"¥129.00","tag":"治愈物","comment":"抱着它会觉得没那么孤单。","detail":"柔软短绒抱枕。"},{"id":"p07","symbol":"🍓","name":"草莓奶冻礼盒","price":99,"priceText":"¥99.00","tag":"甜品","comment":"甜甜的东西适合分享。","detail":"草莓味甜品礼盒。"},{"id":"p08","symbol":"🌷","name":"郁金香小夜灯","price":149,"priceText":"¥149.00","tag":"装饰","comment":"夜里亮起来会很像春天。","detail":"花束造型小夜灯。"},{"id":"p09","symbol":"💌","name":"定制留言卡","price":29.9,"priceText":"¥29.90","tag":"纪念","comment":"想收到一句只写给我的话。","detail":"可定制文字的小卡片。"}]}</${tg}>`}
+function receiptSample(){let rt=receiptTag();return `他看见你发来的购买结果后，认真地把这张小票收好了。\n<${rt}>{"title":"已购买心愿小票","receiver":"糯米","status":"支付成功","orderNo":"QL-20260529-001","time":"刚刚","total":"¥563.00","roleReply":"原来你真的给我买了……我会好好记住这一刻。","note":"这张小票会成为角色知道 USER 已购买的凭证。","items":[{"name":"星空投影仪","priceText":"¥199.00","tag":"氛围小物","comment":"晚上打开会像睡在银河里。"},{"name":"猫爪棉花糖","priceText":"¥39.90","tag":"甜食","comment":"软乎乎的，看着就心情好。"}]}</${rt}>`}
+function genericAiPrompt(){let tg=tag();return `【触发条件】当用户消息包含或近似表达以下任一关键词时，必须触发本规则：${trigger()}\n【聊天融合输出】触发后先用角色口吻自然回应 1-3 句，然后另起一行输出 <${tg}>...</${tg}> 数据块。标签外文字作为聊天保留，标签块用于渲染卡片。\n【标签一致】只能输出 <${tg}>...</${tg}>，禁止输出其他包装标签。\n【字段】JSON 使用 title,name,avatarText,subtitle,totalText,status,updateTime,items。items 内使用 category,symbol,title,type,value,text,note。${qrInstructionBlock()}${outputStructureBlock()}`}
+function shoppingAiPrompt(){
+  let tg=tag();let rt=receiptTag();let receipt=wantsReceiptFlow();let fill=wantsInputFill();let qr=qrInstructionBlock();
+  return `【触发条件】当用户消息包含或近似表达以下任一关键词时，必须触发本规则：${trigger()}
+【聊天融合输出】先用角色口吻自然回复 1-3 句，再另起一行输出 <${tg}>...</${tg}>。卡片只是聊天的一部分，不要只发卡片。
+【标签一致】只能输出 <${tg}>...</${tg}>，禁止输出其他包装标签。
+【用途】生成一个角色心愿单/购物车互动页。USER 可以查看商品、选择商品、结算或获得购买结果。
+【购买按钮行为】购买后先显示页面内支付成功/确认反馈，禁止点击购买后静默自动发送给角色。${fill?'如果需要让角色知道，必须生成 QR 快捷回复文本，填入输入框或显示/复制兜底；用户手动发送后角色才知道。':'用户没有要求告诉角色时，只显示页面内反馈，不要回填输入框。'}
+${receipt?`【二阶段小票】本规则导出时会同时包含第二条 <${rt}> 小票正则。QR 文本应包含 ${qrProtocolName()}、收礼人、商品清单、合计金额和支付状态；用户发送后，AI 不要再生成购物车，而要生成 <${rt}> 小票页面。`:''}
+${qr}${outputStructureBlock()}
+【JSON 字段】必须为扁平 JSON：title,name,avatarText,intro,currency,buyPromptPrefix,items。items 至少 9 个，每项包含 id,symbol,name,price,priceText,tag,comment,detail。price 必须是数字，priceText 是格式化价格。
+【兼容策略】商品名称、价格、评论、详情必须直接由模板显示。商品勾选必须使用原生 checkbox + label + CSS :checked；禁止用 div onclick、grid.addEventListener 或 classList.add('on') 作为勾选主逻辑。JS 只能辅助统计、详情弹窗、购买成功弹窗/动效${fill?'、以及用户主动点击后的 QR 回填/复制/显示兜底':''}。即使 JS 不执行，商品也必须能靠 checkbox 视觉勾选。禁止外部 CDN，禁止 {{#if}}，禁止嵌套 each。` } 
+function receiptAiPrompt(){let rt=receiptTag();let extra=($('secondaryInstruction')?.value||'').trim();return `【触发条件】当用户消息包含 ${qrProtocolName()}、【已购买心愿单】、商品清单、合计金额、生成小票时，触发本规则。\n【关键判断】这不是让你再次生成心愿单购物车，而是 USER 已经完成了 QR 操作结果，需要你以角色口吻回应，并输出已购买小票。\n【聊天融合输出】先用角色口吻自然回应 1-3 句，表达收到礼物/知道 USER 已购买后的反应；再另起一行输出 <${rt}>...</${rt}>。\n【标签一致】只能输出 <${rt}>...</${rt}>，禁止输出购物车标签。\n【JSON 字段】title,receiver,status,orderNo,time,total,roleReply,note,items。items 每项包含 name,priceText,tag,comment。\n【风格】小票要像温柔的已支付凭证，可带订单号、支付成功、收礼人、角色反应和小留言。${extra?'\n【用户补充二阶段规则】'+extra:''}` }
+function genericHtmlTemplate(){return `<div class="q-card"><style>.q-card{max-width:390px;margin:0 auto;background:#fff;border-radius:18px;padding:18px;font-family:-apple-system,'PingFang SC',sans-serif;color:#5b4b52;box-shadow:0 8px 24px rgba(0,0,0,.08)}.q-head{display:flex;gap:12px;align-items:center;border-bottom:1px dashed #ffd0df;padding-bottom:12px}.q-av{width:46px;height:46px;border-radius:50%;background:#ffb7d2;color:white;display:flex;align-items:center;justify-content:center;font-weight:900}.q-name{font-weight:900;font-size:18px}.q-sub{font-size:12px;color:#999}.q-total{text-align:center;padding:16px}.q-value{font-size:24px;color:#ff75a3;font-weight:900}.q-item{display:flex;gap:10px;border-top:1px dashed #eee;padding:10px 0}.q-symbol{font-size:20px}.q-title{font-weight:800}.q-small{font-size:12px;color:#888}</style><div class="q-head"><div class="q-av">{{1.avatarText}}</div><div><div class="q-name">{{1.name}}</div><div class="q-sub">{{1.subtitle}}</div></div></div><div class="q-total"><div>{{1.title}}</div><div class="q-value">{{1.totalText}}</div><div class="q-small">{{1.status}}</div></div>{{#each:1.items}}<div class="q-item"><div class="q-symbol">{{symbol}}</div><div><div class="q-title">{{title}}</div><div class="q-small">{{category}}｜{{type}}｜{{value}}</div><div class="q-small">{{text}}</div><div class="q-small">{{note}}</div></div></div>{{/each}}<div class="q-small" style="text-align:center;margin-top:10px">{{1.updateTime}}</div></div>`}
+function shoppingHtmlTemplate(){
+let fill=wantsInputFill();let receipt=wantsReceiptFlow();let rt=receiptTag();let label=receipt?'生成小票':'告诉他';
+return `<div class="shop-app"><style>
+.shop-app{max-width:420px;margin:0 auto;background:#fff8fb;border:1px solid #ffd3e2;border-radius:20px;overflow:hidden;font-family:-apple-system,'PingFang SC',sans-serif;color:#5b4b52;box-shadow:0 10px 28px rgba(255,117,163,.18)}
+.shop-head{padding:16px;background:linear-gradient(135deg,#ffd6e7,#d7ecff);display:flex;gap:12px;align-items:center}
+.shop-av{width:44px;height:44px;border-radius:50%;background:#fff;color:#ff75a3;display:flex;align-items:center;justify-content:center;font-weight:900;border:2px solid #fff;flex-shrink:0}
+.shop-title{font-size:18px;font-weight:900}.shop-intro{font-size:12px;color:#7e6872;margin-top:3px;line-height:1.45}
+.shop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px}
+.shop-check{position:absolute;opacity:0;pointer-events:none}
+.shop-label{display:block;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.shop-item{position:relative;background:#fff;border:1px solid #ffe0ec;border-radius:14px;padding:10px;min-height:122px;box-shadow:0 4px 10px rgba(0,0,0,.04);transition:.16s}
+.shop-label:active .shop-item{transform:scale(.98)}
+.shop-check:checked + .shop-label .shop-item{border-color:#ff75a3;box-shadow:0 0 0 3px rgba(255,117,163,.18);background:#fff5fa}
+.shop-emoji{font-size:24px}.shop-name{font-size:12px;font-weight:900;line-height:1.25;margin-top:5px;height:31px;overflow:hidden}
+.shop-price{font-size:12px;color:#ff75a3;font-weight:900;margin-top:5px}.shop-tag{font-size:10px;color:#8b7b84;margin-top:2px}
+.shop-dot{position:absolute;right:7px;top:7px;width:18px;height:18px;border-radius:50%;border:1px solid #ffc1d8;background:#fff;color:#fff;text-align:center;line-height:17px;font-size:12px}
+.shop-check:checked + .shop-label .shop-dot{background:#ff75a3}
+.shop-bar{position:sticky;bottom:0;background:rgba(255,255,255,.96);border-top:1px solid #ffe0ec;display:flex;align-items:center;gap:10px;padding:12px}
+.shop-total{flex:1;font-size:13px;color:#7e6872}.shop-total b{color:#ff75a3;font-size:16px}
+.shop-buy{border:none;background:#ff75a3;color:#fff;border-radius:999px;padding:10px 14px;font-weight:900;cursor:pointer}
+.shop-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.25);align-items:center;justify-content:center;padding:18px;z-index:9999}
+.shop-modal.show{display:flex}.shop-pop{max-width:330px;background:#fff;border-radius:18px;padding:18px;box-shadow:0 12px 30px rgba(0,0,0,.18)}
+.shop-pop h3{color:#ff75a3;margin-bottom:8px}.shop-pop p{font-size:13px;line-height:1.6;color:#6b5962}
+.shop-close{margin-top:12px;border:none;background:#d7ecff;color:#407ca7;border-radius:999px;padding:9px 14px;font-weight:900;width:100%;display:block;text-align:center}
+.pay-pop{text-align:center}.pay-check{width:64px;height:64px;border-radius:50%;background:#ff75a3;color:#fff;display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 10px;animation:payPop .42s ease-out}
+.pay-list{max-height:120px;overflow:auto;text-align:left;background:#fff8fb;border:1px dashed #ffd3e2;border-radius:12px;padding:10px;margin:10px 0;font-size:12px;line-height:1.7}
+.pay-total{font-size:18px;color:#ff75a3;font-weight:900;margin:8px 0}.pay-tip{font-size:11px;color:#9a7d88;line-height:1.55;margin-top:6px}
+@keyframes payPop{0%{transform:scale(.4);opacity:.2}70%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+</style>
+<div class="shop-head"><div class="shop-av">{{1.avatarText}}</div><div><div class="shop-title">{{1.title}}</div><div class="shop-intro">{{1.intro}}</div></div></div>
+<div class="shop-grid" id="shopGrid">{{#each:1.items}}<input type="checkbox" class="shop-check" id="shop_{{id}}" data-id="{{id}}" data-name="{{name}}" data-price="{{price}}" data-price-text="{{priceText}}" data-tag="{{tag}}" data-comment="{{comment}}" data-detail="{{detail}}"><label class="shop-label" for="shop_{{id}}"><div class="shop-item"><div class="shop-dot">✓</div><div class="shop-emoji">{{symbol}}</div><div class="shop-name">{{name}}</div><div class="shop-price">{{priceText}}</div><div class="shop-tag">{{tag}}</div></div></label>{{/each}}</div>
+<div class="shop-bar"><div class="shop-total">已选 <span id="selCount">0</span> 件｜合计 <b id="selTotal">{{1.currency}}0.00</b></div><button class="shop-buy" id="buyBtn">购买</button></div>
+<div class="shop-modal" id="detailModal"><div class="shop-pop"><h3 id="mName"></h3><p id="mPrice"></p><p id="mComment"></p><p id="mDetail"></p><button class="shop-close" id="mClose">知道啦</button></div></div>
+<div class="shop-modal" id="payModal"><div class="shop-pop pay-pop"><div class="pay-check">✓</div><h3>支付成功</h3><p>你已经买下这些心愿啦。</p><div class="pay-list" id="payList"></div><div class="pay-total" id="payTotal"></div>${fill?'<button class="shop-close" id="tellRoleBtn">'+label+'</button><div class="pay-tip">点击后会把购买信息填入输入框，需要你手动发送，角色才会知道并生成下一步内容。</div><button class="shop-close" id="payClose" style="margin-top:8px;background:#fff;color:#ff75a3;border:1px solid #ffd3e2">先不说</button>':'<button class="shop-close" id="payClose">完成</button>'}</div></div>
+<script>(function(){
+var count=document.getElementById('selCount');var total=document.getElementById('selTotal');var cur='{{1.currency}}'||'¥';var receiptMode=${receipt?'true':'false'};var receiptTag='${rt}';
+function getSelected(){
+  var boxes=[].slice.call(document.querySelectorAll('.shop-check:checked'));var names=[],items=[],sum=0;
+  boxes.forEach(function(c){
+    var it={name:c.getAttribute('data-name')||'',price:c.getAttribute('data-price')||0,priceText:c.getAttribute('data-price-text')||'',tag:c.getAttribute('data-tag')||'',comment:c.getAttribute('data-comment')||'',detail:c.getAttribute('data-detail')||''};
+    names.push(it.name+'('+it.priceText+')');items.push(it);sum+=Number(it.price)||0;
+  });
+  if(count)count.textContent=names.length;if(total)total.textContent=cur+sum.toFixed(2);
+  return {names:names,items:items,sum:sum};
+}
+function update(){return getSelected()}
+[].slice.call(document.querySelectorAll('.shop-check')).forEach(function(c){c.addEventListener('change',update)});
+document.querySelectorAll('.shop-label').forEach(function(lb){
+  lb.addEventListener('contextmenu',function(e){e.preventDefault();var c=document.getElementById(lb.getAttribute('for'));if(c)show(c)});
+});
+function show(c){document.getElementById('mName').textContent=c.getAttribute('data-name')||'';document.getElementById('mPrice').textContent=c.getAttribute('data-price-text')||'';document.getElementById('mComment').textContent=c.getAttribute('data-comment')||'';document.getElementById('mDetail').textContent=c.getAttribute('data-detail')||'';document.getElementById('detailModal').classList.add('show')}
+var mc=document.getElementById('mClose');if(mc)mc.onclick=function(){document.getElementById('detailModal').classList.remove('show')};
+var pc=document.getElementById('payClose');if(pc)pc.onclick=function(){document.getElementById('payModal').classList.remove('show')};
+function buildTellText(res){var lines=[];if(receiptMode){lines.push('${qrProtocolName()}');lines.push('收礼人：{{1.name}}');lines.push('商品：');res.items.forEach(function(it,i){lines.push((i+1)+'. '+it.name+' '+it.priceText+'｜'+(it.tag||'')+'｜'+(it.comment||''))});lines.push('合计：'+cur+res.sum.toFixed(2));lines.push('请根据以上购买结果，用角色口吻回应，并输出 <'+receiptTag+'>...</'+receiptTag+'> 小票JSON页面。不要再生成购物车。')}else{lines.push('{{1.buyPromptPrefix}}'+(res.names.length?res.names.join('，'):'还没有选择商品'))}return lines.join('\\n')}
+var tellBtn=document.getElementById('tellRoleBtn');if(tellBtn){tellBtn.onclick=function(){var res=update();var text=buildTellText(res);try{parent.postMessage({type:'chat-input-fill',text:text},'*')}catch(e){}try{navigator.clipboard.writeText(text)}catch(e){}document.getElementById('payModal').classList.remove('show')}}
+var buy=document.getElementById('buyBtn');if(buy){buy.onclick=function(){var res=update();document.getElementById('payList').innerHTML=res.names.length?res.names.map(function(x){return '· '+x}).join('<br>'):'还没有选择商品';document.getElementById('payTotal').textContent='合计 '+cur+res.sum.toFixed(2);document.getElementById('payModal').classList.add('show')}}
+update();
+})();<\/script></div>`}
+function receiptHtmlTemplate(){return `<div class="receipt-card"><style>.receipt-card{max-width:390px;margin:0 auto;background:#fff;border:1px solid #ffd8e6;border-radius:20px;padding:18px;font-family:-apple-system,'PingFang SC',sans-serif;color:#5b4b52;box-shadow:0 10px 26px rgba(255,117,163,.14)}.r-top{text-align:center;border-bottom:1px dashed #ffc1d8;padding-bottom:12px}.r-stamp{display:inline-block;background:#ff75a3;color:#fff;border-radius:999px;padding:7px 14px;font-weight:900;margin-bottom:8px}.r-title{font-size:19px;font-weight:900;color:#ff75a3}.r-sub{font-size:12px;color:#8b7b84;margin-top:4px}.r-row{display:flex;justify-content:space-between;gap:12px;font-size:12px;padding:8px 0;border-bottom:1px dashed #f0e2e8}.r-items{margin:12px 0}.r-item{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px dashed #f4dce7}.r-name{font-weight:900;font-size:13px}.r-note{font-size:11px;color:#8b7b84;margin-top:3px;line-height:1.45}.r-price{color:#ff75a3;font-weight:900;white-space:nowrap}.r-total{text-align:right;font-size:20px;font-weight:900;color:#ff75a3;margin-top:12px}.r-reply{background:#fff8fb;border:1px dashed #ffd3e2;border-radius:14px;padding:12px;font-size:13px;line-height:1.65;margin-top:14px}.r-foot{text-align:center;font-size:11px;color:#aaa;margin-top:12px}</style><div class="r-top"><div class="r-stamp">{{1.status}}</div><div class="r-title">{{1.title}}</div><div class="r-sub">收礼人：{{1.receiver}}｜订单号：{{1.orderNo}}</div><div class="r-sub">{{1.time}}</div></div><div class="r-items">{{#each:1.items}}<div class="r-item"><div><div class="r-name">{{name}}</div><div class="r-note">{{tag}}｜{{comment}}</div></div><div class="r-price">{{priceText}}</div></div>{{/each}}</div><div class="r-total">合计 {{1.total}}</div><div class="r-reply">{{1.roleReply}}</div><div class="r-foot">{{1.note}}</div></div>`}
+function makeReceiptRule(){let rt=receiptTag();return {name:($('ruleName').value||'心愿单')+' - 已购买小票',category:$('category').value||'清皊正则集',enabled:Number($('enabled').value),isHtmlTemplate:true,pattern:'<'+rt+'>([\\s\\S]*?)</'+rt+'>',flags:'g',replacement:'',htmlTemplate:receiptHtmlTemplate(),cssScope:'',aiPrompt:receiptAiPrompt(),parseMode:'json',renderMode:$('renderMode').value||'iframe',scope:'global',characterIds:[],scenes:['chat'],role:'both',applyOnDisplay:1,applyOnPrompt:0,minDepth:null,maxDepth:null,trim:0,order:1,triggerEnabled:1,triggerKeywords:['已购买心愿单','生成小票','购买小票','支付成功']}}
+function splitTriggerKeywords(v){
+  if(Array.isArray(v))return v.map(x=>String(x||'').trim()).filter(Boolean);
+  return String(v||'').split(/[，,、\n]/).map(x=>x.trim()).filter(Boolean);
+}
+function safePatternForTag(tg){
+  tg=String(tg||'custom-card').trim().replace(/[<>\s]/g,'')||'custom-card';
+  // 稳定优先：不要把 pattern 写成只匹配 {JSON} 的严格版，嵌套商品对象或换行时更容易掉格式。
+  return '<'+tg+'>([\\s\\S]*?)</'+tg+'>';
+}
+function hardenRuleForExport(rule,tg){
+  rule=Object.assign({},rule||{});
+  tg=tg||tag();
+  rule.pattern=safePatternForTag(tg);
+  rule.flags=rule.flags||'g';
+  rule.parseMode=rule.parseMode||'json';
+  rule.renderMode=rule.renderMode||'iframe';
+  rule.isHtmlTemplate=true;
+  rule.applyOnDisplay=1;
+  if(rule.applyOnPrompt===undefined)rule.applyOnPrompt=0;
+  rule.triggerKeywords=splitTriggerKeywords(rule.triggerKeywords!==undefined?rule.triggerKeywords:trigger());
+  if(rule.aiPrompt){
+    rule.aiPrompt=String(rule.aiPrompt)
+      .replace(/pattern[^\n]*?<[^>]+>[^\n]*/ig,'')
+      + '\n【格式稳定要求】输出标签必须单独成块，建议格式为：\n<' + tg + '>{JSON}</' + tg + '>\n不要使用代码块，不要把标签转义成 &lt; 或全角括号。';
+  }
+  return rule;
+}
+function buildExportRules(primary){let rules=[hardenRuleForExport(primary,tag())];if(currentIsShopping()&&wantsReceiptFlow())rules.push(hardenRuleForExport(makeReceiptRule(),receiptTag()));return rules}
+function renderTemplatePreview(tpl,data){let html=tpl||'';html=html.replace(/{{#each:1\.items}}([\s\S]*?){{\/each}}/g,(m,inner)=>Array.isArray(data.items)?data.items.map(it=>inner.replace(/{{\s*([\w]+)\s*}}/g,(mm,k)=>escapeHtml(it[k]??''))).join(''):'');html=html.replace(/{{1\.([\w]+)}}/g,(m,k)=>escapeHtml(data[k]??''));html=html.replace(/{{\s*([\w]+)\s*}}/g,(m,k)=>escapeHtml(data[k]??''));return html}
+function escapeHtml(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+function dataFromSample(sample){let tg=tag();let re=new RegExp('<'+tg+'>([\\s\\S]*?)<\\/'+tg+'>');let m=(sample||'').match(re);if(!m)return {};try{return JSON.parse(m[1].trim())}catch(e){return {}}}
+function renderCurrentPreview(show=true){let data=dataFromSample($('sampleOutput').value||shoppingSample());$('previewFrame').srcdoc=renderTemplatePreview($('htmlTemplate').value,data);if(show)toast('已刷新预览')}
+function parseJsonLoose(txt){
+  txt=String(txt||'').trim();
+  if(!txt)throw new Error('AI 返回为空');
+  txt=txt.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/```$/,'').trim();
+  try{return JSON.parse(txt)}catch(e){}
+  let a=txt.indexOf('{'),b=txt.lastIndexOf('}');
+  if(a>=0&&b>a){
+    let sliced=txt.slice(a,b+1);
+    try{return JSON.parse(sliced)}catch(e){}
+  }
+  throw new Error('AI 返回不是合法 JSON，请重试或换模型')
+}
+function unwrapHtmlTemplateMaybe(html,depth=0){html=String(html||'').trim();if(depth>3)return html;if((html.startsWith('[')||html.startsWith('{'))&&/"htmlTemplate"\s*:/.test(html)){try{let obj=JSON.parse(html);if(Array.isArray(obj))obj=obj[0];if(obj&&typeof obj.htmlTemplate==='string')return unwrapHtmlTemplateMaybe(obj.htmlTemplate,depth+1)}catch(e){}}return html}
+function cleanHtml(html){html=unwrapHtmlTemplateMaybe(html);html=html.replace(/<script\s+src=[\s\S]*?<\/script>/gi,'').replace(/<link[\s\S]*?>/gi,'').replace(/@import[^;]+;/gi,'');if($('imageUse').value==='不使用图片')html=html.replace(/<img[\s\S]*?>/gi,'');html=html.replace(/{{#if[\s\S]*?}}/g,'').replace(/{{\/if}}/g,'').replace(/{{else}}/g,'');return html}
+function normalizeRule(rule){let tg=tag();let base={name:$('ruleName').value||'未命名规则',category:$('category').value||'',enabled:Number($('enabled').value),isHtmlTemplate:true,pattern:'<'+tg+'>([\\s\\S]*?)</'+tg+'>',flags:$('flags').value||'g',replacement:'',htmlTemplate:'',cssScope:'',aiPrompt:'',parseMode:$('parseMode').value,renderMode:$('renderMode').value,scope:'global',characterIds:[],scenes:['chat'],role:$('role').value,applyOnDisplay:1,applyOnPrompt:0,minDepth:null,maxDepth:null,trim:0,order:0,triggerEnabled:1,triggerKeywords:trigger()};let src=rule||{};let clean={};Object.keys(base).forEach(k=>{if(src[k]!==undefined)clean[k]=src[k]});rule=Object.assign(base,clean);rule.pattern=base.pattern;rule.flags=base.flags;rule.triggerKeywords=base.triggerKeywords;let isShop=currentIsShopping();rule.htmlTemplate=cleanHtml(isShop?shoppingHtmlTemplate():(rule.htmlTemplate||$('htmlTemplate').value));rule.aiPrompt=isShop?shoppingAiPrompt():fixPrompt(rule.aiPrompt||$('aiPrompt').value,tg);rule.parseMode=$('parseMode').value;rule.renderMode=$('renderMode').value;rule.role=$('role').value;return rule}
+function fixPrompt(p,tg){p=String(p||'');let head=`【触发条件】当用户消息包含或近似表达以下任一关键词时，必须触发本规则：${trigger()}\n【聊天融合输出】先用角色口吻自然回复 1-3 句，再另起一行输出 <${tg}>...</${tg}>。标签外自然回复会保留为聊天文字，标签块会被渲染成界面。\n【标签一致】只能输出 <${tg}>...</${tg}>，禁止输出其他包装标签。\n`;return head+p.replace(/【触发条件】[\s\S]*?(?=\n\n|$)/,'').replace(/<custom-card>/g,'<'+tg+'>').replace(/<\/custom-card>/g,'</'+tg+'>')}
+function makeRule(){if(currentIsShopping()){ $('fieldSpec').value=shoppingFieldSpec(); $('sampleOutput').value=shoppingSample(); $('aiPrompt').value=shoppingAiPrompt(); $('htmlTemplate').value=shoppingHtmlTemplate(); }let rule={htmlTemplate:$('htmlTemplate').value,aiPrompt:$('aiPrompt').value,cssScope:$('cssScope').value};return normalizeRule(rule)}
+async function generateAll(){
+  syncPattern();
+  let cfg=apiConfig();
+  let aiButtons=[...document.querySelectorAll('button')].filter(b=>(b.getAttribute('onclick')||'').includes('generateAll'));
+  let oldTexts=aiButtons.map(b=>b.textContent);
+  function setWorking(on){aiButtons.forEach((b,i)=>{b.disabled=on;b.textContent=on?'✨ AI生成中...':oldTexts[i]})}
+  function showOutputError(msg){
+    $('jsonOut').classList.remove('placeholder');
+    $('jsonOut').textContent='AI 生成失败：'+msg+'\n\n请检查：\n1. API Base URL 是否正确，例如 https://api.openai.com/v1 或你的中转 /v1 地址；\n2. API Key 是否有效；\n3. Model 是否填写，或先点击“拉取模型”；\n4. 浏览器控制台是否有 CORS / Network 报错。';
+    $('compatOut').innerHTML='<b style="color:#d94870">AI生成未完成：</b><br>• '+escapeHtml(msg);
+  }
+  if(!cfg.base||!cfg.key||!cfg.model){
+    let miss=[];if(!cfg.base)miss.push('API Base URL');if(!cfg.key)miss.push('API Key');if(!cfg.model)miss.push('Model');
+    let msg='缺少 '+miss.join(' / ')+'。请先填写后再点 AI生成。';
+    toast(msg);showOutputError(msg);return;
+  }
+  let tg=tag();let isApp=currentIsShopping();
+  let payload={need:$('userNeed').value,extra:$('extraNeed').value,ruleName:$('ruleName').value,category:$('category').value,tag:tg,triggerKeywords:trigger(),parseMode:$('parseMode').value,renderMode:$('renderMode').value,role:$('role').value,imageUse:$('imageUse').value,selectedTags:selectedTagsSummary(),interactionPreset:$('interactionPreset')?.value||'',purchaseFlow:purchaseFlowMode(),qrMode:qrMode(),qrCarrier:qrCarrier(),qrPayload:qrPayload(),qrAfterAction:qrAfterAction(),qrScene:qrScene(),qrTriggerAction:qrTriggerAction(),qrResultType:qrResultType(),qrTone:qrTone(),qrSafety:qrSafety(),receiptTag:receiptTag(),secondaryInstruction:$('secondaryInstruction')?.value||'',worldBook:$('worldBook').value};
+  let prompt=`你是糯叽机 HTML 正则生成器。根据需求生成一条可导入的正则 JSON。
+
+世界书：
+${payload.worldBook||'无'}
+
+用户配置：
+${JSON.stringify(payload,null,2)}
+
+QR互动专项设置：
+- interactionPreset：${payload.interactionPreset}
+- purchaseFlow：${payload.purchaseFlow}
+- qrMode：${payload.qrMode}
+- qrCarrier：${payload.qrCarrier}
+- qrPayload：${payload.qrPayload}
+- qrAfterAction：${payload.qrAfterAction}
+- qrScene：${payload.qrScene}
+- qrTriggerAction：${payload.qrTriggerAction}
+- qrResultType：${payload.qrResultType}
+- qrTone：${payload.qrTone}
+- qrSafety：${payload.qrSafety}
+- receiptTag：${payload.receiptTag}
+- secondaryInstruction：${payload.secondaryInstruction||'无'}
+
+QR生成原则：
+1. QR 是 Quick Reply / Quick Response，不是二维码。
+2. 需要 QR 的正则必须明确“按钮/选择结果 → 角色可读文本 → 用户发送 → AI 后续动作”的链路。
+3. 固定按钮类优先使用 options[{label,fill}] 或 button data-fill；动态汇总类可以用 JS 计算结果，但必须提供页面内显示/复制兜底。场景型 QR 必须使用对应前缀，例如【QR_协议签署】、【QR_点菜订单】、【QR_测试结算】、【QR_客户跟进】。
+4. 禁止静默自动替用户发送；只能回填输入框或显示结果，用户发送后角色才知道。
+5. 需要二阶段时，必须同步选择 outputFormat/resultRole/secondStage，让 AI 明确第一阶段输出和第二阶段输出的区别。
+
+只返回合法 JSON 对象：{fieldSpec,sampleContent,rule}。rule 必须是糯叽机正则对象。
+
+硬性要求：
+1. pattern、sampleContent、aiPrompt 示例中的标签必须完全是 <${tg}>...</${tg}>。
+2. triggerKeywords 只能等于用户填写：${trigger()}，禁止扩展。
+3. htmlTemplate 必须是真正 HTML，不允许是整条规则 JSON 或 JSON 数组。
+4. 禁止外部 CDN、FontAwesome、Google Fonts、GSAP、@import。
+5. 禁止 {{#if}}、{{else}}、{{/if}}、{{this.xxx}}、{{../1.xxx}}；最多一个 {{#each:1.items}}。
+6. ${isApp?'当前是互动小应用模式：允许 JS 做点击、勾选、详情弹窗、总价计算、购买成功弹窗/支付动效；但商品名、价格、评论、详情必须由模板静态显示。购物车结构必须使用 title,name,avatarText,intro,currency,buyPromptPrefix,items；items 字段 id,symbol,name,price,priceText,tag,comment,detail。页面必须包含九宫格商品、详情弹窗、底部结算栏、购买按钮。若需要 QR，必须写清 QR 前缀、QR 文本结构、用户发送后的 AI 响应规则；不要点击购买就自动塞输入框，更不要静默自动发送。购物/心愿单多选必须用原生 checkbox + label + CSS :checked，禁止 div onclick/addEventListener 切换 .on 做勾选。':'当前是静态/半互动模式：关键内容必须静态直显，不允许核心内容依赖 JS。若需要 QR，优先生成 AI options[{label,fill}] 或固定 data-fill 按钮，并说明用户发送后角色如何识别。'}
+7. 触发后角色应先自然回复 1-3 句，再输出标签块，卡片是聊天的一部分。
+
+再次强调：最终回复只能是一个 JSON 对象，不要 Markdown，不要解释文字。`;
+  setWorking(true);toast('正在调用 AI 生成...');
+  try{
+    let r=await fetch(cfg.base+'/chat/completions',{method:'POST',headers:{Authorization:'Bearer '+cfg.key,'Content-Type':'application/json'},body:JSON.stringify({model:cfg.model,messages:[{role:'system',content:'你只能输出合法 JSON 对象，不要 Markdown。'},{role:'user',content:prompt}],temperature:.25})});
+    let text=await r.text();let j={};
+    try{j=JSON.parse(text)}catch(e){throw new Error('接口返回不是 JSON：'+text.slice(0,180))}
+    if(!r.ok)throw new Error(j?.error?.message||j?.message||r.status+' '+r.statusText);
+    let raw=j.choices?.[0]?.message?.content||j.choices?.[0]?.text||'';
+    let got=parseJsonLoose(raw);
+    let rule=normalizeRule(got.rule||got);
+    if(currentIsShopping()){$('fieldSpec').value=got.fieldSpec||shoppingFieldSpec();$('sampleOutput').value=(got.sampleContent&&String(got.sampleContent).includes('<'+tg+'>'))?got.sampleContent:shoppingSample();}
+    else{$('fieldSpec').value=got.fieldSpec||genericFieldSpec();$('sampleOutput').value=got.sampleContent||$('sampleOutput').value||genericSample();}
+    $('htmlTemplate').value=rule.htmlTemplate;$('aiPrompt').value=rule.aiPrompt;$('jsonOut').classList.remove('placeholder');let rules=buildExportRules(rule);$('jsonOut').textContent=JSON.stringify(rules,null,2);currentRule=rule;checkCompat(rule);if(rules.length>1){$('compatOut').innerHTML += '<br><br><b style="color:#2c9b66">二阶段小票：</b><br>• 已同时导出 '+rules[1].name+'。';}renderCurrentPreview(false);toast(rules.length>1?'AI 已生成购物页 + 小票双正则':'AI 已生成');
+  }catch(e){let msg=e&&e.message?e.message:String(e);toast('AI 生成失败：'+msg);showOutputError(msg);}
+  finally{setWorking(false)}
+}
+function generateShoppingLocal(){setTags({runMode:['互动小应用模式'],uiContainer:['购物车页面','商品九宫格','商品详情页','底部结算栏'],uiStyle:['购物平台风','奶油柔和'],uiLayout:['九宫格布局','3×3宫格','商品卡片网格','详情弹窗','底部固定栏','总价栏','购买成功页'],uiImageRole:['不使用图片'],templateType:['心愿清单类','购物车互动类','商品选择类','结算反馈类'],interactionType:['商品详情弹窗','多选勾选','总价自动计算','确认购买','购买结果填入输入框'],dataShape:['购物车互动JSON'],fieldPack:['商品字段包','购物结算字段包'],actionPack:['购买按钮','购买结果回填','data-fill回填','QR回填按钮','生成小票按钮'],outputFormat:['自然回复+QR','QR文本+二阶段标签'],resultRole:['用户发送给角色'],secondStage:['生成小票页'],contentLength:['9项商品']});let rule=makeRule();$('sampleOutput').value=shoppingSample();$('jsonOut').classList.remove('placeholder');let rules=buildExportRules(rule);$('jsonOut').textContent=JSON.stringify(rules,null,2);currentRule=rule;checkCompat(rule);if(rules.length>1){$('compatOut').innerHTML += '<br><br><b style="color:#2c9b66">二阶段小票：</b><br>• 已同时导出小票正则。';}renderCurrentPreview(false);toast(rules.length>1?'已生成购物页 + 小票双正则':'已生成本地稳定购物页')}
+function checkCompat(rule){let w=[],ok=[];let html=rule.htmlTemplate||'';if(/^\s*[\[{]/.test(html))w.push('htmlTemplate 疑似是代码/JSON，不是真 HTML');else ok.push('htmlTemplate 是 HTML');if(rule.pattern.includes('<'+tag()+'>'))ok.push('标签与 pattern 同步');else w.push('标签与 pattern 不同步');let tkNow=splitTriggerKeywords(rule.triggerKeywords).join('，');let tkInput=splitTriggerKeywords(trigger()).join('，');if(tkNow===tkInput)ok.push('触发词严格使用输入框内容');else w.push('触发词可能被扩展或改变');if(/{{#if|{{else}}|{{\/if}}|{{this\.|{{\.\.\//.test(html))w.push('存在小手机不稳定模板语法');else ok.push('无条件语法/this 语法');if(/<script\s+src=|<link|@import|font-awesome|gsap|googleapis/i.test(html))w.push('存在外部依赖');else ok.push('无外部依赖');if(/data-(?:value|target|target-value)=["'][^"']*{{[^}]+}}[^>]*>\s*0\s*</i.test(html))w.push('核心数值疑似依赖 JS 后渲染');else ok.push('未发现核心数值初始 0');if(currentIsShopping()){if(/type=["']checkbox["'][\s\S]{0,1200}<label/i.test(html)&&/:checked\s*\+\s*\.shop-label/.test(html))ok.push('购物勾选使用原生 checkbox + label');else w.push('购物/心愿单应使用原生 checkbox + label + CSS :checked，禁止只靠 JS 切换 .on');if(/addEventListener\(['"]click['"][\s\S]{0,600}classList\.add\(['"]on['"]\)|\.shop-item\.on|classList\.toggle\(['"]on['"]\)/.test(html))w.push('检测到旧式 JS/.on 勾选逻辑，可能导致小手机无法勾选');}if(wantsQrFlow()){if(/data-fill|postMessage|clipboard|QR_/.test(html+String(rule.aiPrompt||'')))ok.push('已包含 QR 回填/识别线索');else w.push('已选择 QR，但模板或 prompt 未出现 data-fill/postMessage/QR_ 线索');}$('compatOut').innerHTML=(w.length?'<b style="color:#d94870">需注意：</b><br>• '+w.join('<br>• '):'<b style="color:#2c9b66">通过：</b>')+'<br><br><b>检查项：</b><br>• '+ok.join('<br>• ')}
+function extractRuleFromJsonOut(){
+  let txt=($('jsonOut')?.textContent||'').trim();
+  if(!txt||$('jsonOut').classList.contains('placeholder'))return null;
+  try{
+    let obj=parseJsonLoose(txt);
+    if(Array.isArray(obj))return obj[0]||null;
+    if(obj&&obj.rule)return obj.rule;
+    if(obj&&obj.htmlTemplate)return obj;
+    return null;
+  }catch(e){
+    return null;
+  }
+}
+function copyResultHtmlToEditor(){
+  try{
+    syncPattern();
+    let rule=extractRuleFromJsonOut()||currentRule;
+    let html='';
+    if(rule&&typeof rule.htmlTemplate==='string'&&rule.htmlTemplate.trim())html=rule.htmlTemplate;
+    if(!html&&$('htmlTemplate').value.trim())html=$('htmlTemplate').value;
+    if(!html){
+      // 没有生成结果时，不再静默失败，直接按当前标签生成一份可预览 HTML
+      refreshByTags(false);
+      rule=makeRule();
+      html=rule.htmlTemplate||$('htmlTemplate').value||'';
+      currentRule=rule;
+      $('jsonOut').classList.remove('placeholder');
+      $('jsonOut').textContent=JSON.stringify(buildExportRules(rule),null,2);
+      checkCompat(rule);
+    }
+    html=cleanHtml(html);
+    if(!html.trim())throw new Error('当前没有可提取的 htmlTemplate');
+    $('htmlTemplate').value=html;
+    renderCurrentPreview(true);
+    $('compatOut').innerHTML='<b style="color:#2c9b66">HTML 已提取：</b><br>• 已写入下方代码框，并刷新预览。';
+    try{$('htmlTemplate').scrollIntoView({behavior:'smooth',block:'center'});$('htmlTemplate').focus();}catch(e){}
+    toast('已提取 HTML 到下方代码框');
+  }catch(e){
+    let msg=e&&e.message?e.message:String(e);
+    toast('提取失败：'+msg);
+    $('compatOut').innerHTML='<b style="color:#d94870">HTML 提取失败：</b><br>• '+escapeHtml(msg)+'<br>• 可以先点“本地稳定购物页”或“AI生成”，再点“提取 HTML 到下方代码框”。';
+  }
+}
+function updateRuleFromEditor(){let rule=currentRule;try{if($('jsonOut').textContent&&!$('jsonOut').classList.contains('placeholder'))rule=JSON.parse($('jsonOut').textContent)[0]}catch(e){}rule=normalizeRule(rule||{});rule.htmlTemplate=cleanHtml($('htmlTemplate').value||rule.htmlTemplate);currentRule=rule;return rule}
+function currentExportRules(){let rule=updateRuleFromEditor();return buildExportRules(rule)}
+async function copyJson(){let rules=currentExportRules();let txt=JSON.stringify(rules,null,2);$('jsonOut').textContent=txt;$('jsonOut').classList.remove('placeholder');try{await navigator.clipboard.writeText(txt);toast(rules.length>1?'已复制双正则 JSON':'已复制 JSON')}catch(e){toast('复制失败，请手动复制')}}
+function downloadJson(){let rules=currentExportRules();downloadText(($('ruleName').value||'nuojiji-rule')+'.json',JSON.stringify(rules,null,2));toast(rules.length>1?'已下载购物页 + 小票双正则':'已下载 JSON')}
+function downloadAll(){downloadJson()}
+function downloadText(name,text){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'application/json'}));a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function copyHtmlTemplate(){navigator.clipboard.writeText($('htmlTemplate').value||'').then(()=>toast('已复制 HTML'),()=>toast('复制失败'))}
+function clearPreview(){$('htmlTemplate').value='';$('previewFrame').srcdoc='';toast('已清空')}
+function refreshPreviewOnly(){renderCurrentPreview(true)}
+function randomTags(){Object.keys(TAGS).forEach(id=>{let arr=TAGS[id];let vals=SINGLE[id]?[arr[Math.floor(Math.random()*arr.length)]]:arr.slice().sort(()=>Math.random()-.5).slice(0,3);state[id]=vals});setTags(state);toast('已随机搭配')}
+window.copyResultHtmlToEditor=copyResultHtmlToEditor;window.generateAll=generateAll;window.generateShoppingLocal=generateShoppingLocal;window.refreshPreviewOnly=refreshPreviewOnly;
+window.addEventListener('DOMContentLoaded',()=>{renderTags();renderInteractiveSettingTags();$('apiBase').value=localStorage.getItem('ql_api_base')||'';$('apiKey').value=localStorage.getItem('ql_key')||'';$('model').value=localStorage.getItem('ql_model')||'';$('worldBook').value=localStorage.getItem('ql_worldbook')||'';setTags({runMode:['静态展示模式'],uiContainer:['单卡片'],uiStyle:['粉蓝手账'],uiLayout:['顶部标题栏'],uiTexture:['圆角卡片'],uiImageRole:['不使用图片'],templateType:['展示信息类'],triggerScene:['用户询问'],interactionType:['无交互'],outputBlocks:['自然回复','标题区','明细列表'],safeMode:['小手机兼容','标签强同步','触发词严格'],dataShape:['单对象JSON'],fieldPack:['通用卡片字段'],actionPack:['无按钮'],contentLength:['中等内容']});$('htmlTemplate').addEventListener('input',()=>renderCurrentPreview(false));document.querySelectorAll('button').forEach(b=>{let t=(b.textContent||'');if(t.includes('提取 HTML')||t.includes('HTML到预览')){b.addEventListener('click',function(ev){try{copyResultHtmlToEditor()}catch(e){toast('提取失败：'+(e.message||e))}})}});if($('purchaseFlow'))$('purchaseFlow').value='success_only';setQrSettings('none','none','short_protocol','role_reply','confirm_before_fill','general','button_click','operation_result','role_readable_soft');syncInteractiveSettingTags();let reb=null;['userNeed','extraNeed'].forEach(function(id){let el=$(id);if(el)el.addEventListener('input',function(){if(($('interactionAuto')?.value||'auto')==='auto'){clearTimeout(reb);reb=setTimeout(function(){applyInteractionFromNeed(false)},450)}})});syncPattern();applyInteractionFromNeed(false);syncInteractiveSettingTags();});
+</script>
+</body>
+</html>
